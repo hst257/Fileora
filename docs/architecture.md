@@ -43,6 +43,10 @@ Normalized inner product is cosine similarity. Exact FlatIP is deliberately simp
 
 Restarted running jobs return to the queue and reconcile from the root. Cancellation preserves earlier completed files and discards the current uncommitted revision. Shutdown retains the process lock until the worker stops. Embedding batches are cooperative: shutdown may wait for the current batch. Forgetting a folder removes active catalog/FTS rows, deletes its unreferenced preview assets, clears in-memory indexes, and removes snapshots for regeneration; originals are untouched.
 
+V2 automatic updates are controlled through `GET/PUT /api/v1/index/watch`. The session-protected PUT stores `watch_enabled` in `app_meta`; no schema migration is needed. A normal server launch restores that preference, while `serve --watch` or `--no-watch` overrides it for one run. The worker serializes observer lifecycle changes, ignores events from excluded/hidden/dependency paths and unsupported files, coalesces relevant events for one second, and hashes affected files even when metadata is unchanged. Directory move/create/delete hints force verification of descendants. Disabling watching stops new automatic jobs and clears pending hints; existing queued/running jobs continue.
+
+Observer schedule/start failures, unavailable roots, and stopped emitter threads are visible in health/watch status. Full verification continues every 15 minutes when watching is enabled, and periodic reconciliation reattaches restored roots. Watcher events remain hints; the allowlisted scanner is authoritative. These scans traverse the selected roots and skip unchanged files rather than maintaining a second filesystem-event database.
+
 ## Retrieval
 
 - Apply root, modality, extension, date, and escaped relative-path filters before ranking. FTS filters eligible IDs before LIMIT; filtered vector search scores eligible vectors exactly in bounded batches.

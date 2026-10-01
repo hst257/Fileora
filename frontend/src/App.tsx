@@ -31,6 +31,7 @@ import type {
   Result,
   SearchResponse,
   Status,
+  WatchStatus,
 } from "./types";
 
 const examples = [
@@ -116,6 +117,8 @@ export function App() {
   const [ask, setAsk] = useState(false);
   const [rootPath, setRootPath] = useState("");
   const [libraryBusy, setLibraryBusy] = useState(false);
+  const [pendingWatch, setPendingWatch] = useState<boolean>();
+  const watchBusy = pendingWatch !== undefined;
   const [jobDetail, setJobDetail] = useState<Job>();
   const input = useRef<HTMLInputElement>(null);
   const controller = useRef<AbortController | undefined>(undefined);
@@ -262,6 +265,23 @@ export function App() {
       setError((err as Error).message);
     } finally {
       setLibraryBusy(false);
+    }
+  }
+
+  async function setWatching(enabled: boolean) {
+    setPendingWatch(enabled);
+    setError("");
+    try {
+      const watch = await api<WatchStatus>("/index/watch", {
+        method: "PUT",
+        body: JSON.stringify({ enabled }),
+      });
+      setHealth((current) => (current ? { ...current, watch } : current));
+      await refresh();
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setPendingWatch(undefined);
     }
   }
 
@@ -886,6 +906,58 @@ export function App() {
                 <span>indexed folders</span>
               </div>
             </div>
+            <section
+              className="watch-section"
+              aria-label="Automatic library updates"
+            >
+              <div className="section-heading">
+                <div>
+                  <h2>Keep my library current</h2>
+                  <p className="small muted">
+                    Automatically index edits, new files, renames, and deletions
+                    in your selected folders while Fileora is running.
+                  </p>
+                </div>
+                <label className="watch-control">
+                  <input
+                    type="checkbox"
+                    role="switch"
+                    aria-label="Watch folders"
+                    checked={pendingWatch ?? health?.watch?.enabled ?? false}
+                    disabled={watchBusy || !health?.watch}
+                    onChange={(event) => void setWatching(event.target.checked)}
+                  />
+                  Watch folders
+                </label>
+              </div>
+              <p className="small muted" role="status">
+                {watchBusy
+                  ? "Updating automatic scans…"
+                  : health?.watch?.state === "watching"
+                    ? `Watching ${health.watch.watched_roots} ${health.watch.watched_roots === 1 ? "folder" : "folders"}.`
+                    : health?.watch?.state === "waiting"
+                      ? "Automatic updates are on. Add a folder to begin."
+                      : health?.watch?.state === "polling"
+                        ? "Some folder watchers are unavailable. Periodic scans are keeping your library current."
+                        : health?.watch?.state === "stopped"
+                          ? "The indexing worker has stopped. Restart Fileora to resume automatic updates."
+                          : "Automatic updates are off. Rescan whenever you want to refresh your library."}
+              </p>
+              {health?.watch?.enabled && (
+                <p className="small muted">
+                  A full verification runs every{" "}
+                  {Math.round(health.watch.reconcile_seconds / 60)} minutes.
+                  Your preference is saved on this device. Turning this off lets
+                  the current scan finish.
+                </p>
+              )}
+              {health?.watch?.errors.map((item) => (
+                <p className="small watch-warning" key={item.path}>
+                  Could not watch {item.path}. It will be checked during the
+                  next full scan.
+                </p>
+              ))}
+            </section>
             {!health?.semantic_ready && (
               <div className="model-notice">
                 <FileText size={22} />

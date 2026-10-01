@@ -4,6 +4,8 @@ The implementation provides the five planned functional layers, with optional me
 
 Validated here: Windows Python 3.11, CPU MiniLM/CLIP inference, portable English OCR, Java/Python parsing, text/PDF/image fixtures, incremental correctness/recovery tests, frontend tests, and a real Chromium workspace flow. Synthetic media and independent time-interval evaluation are included. Ollama contracts are tested through a local HTTP stub; live Qwen generation, CUDA execution, Linux desktop UX, and a representative 100K-chunk library require separate validation.
 
+The [V2 milestone](v2.md) now includes saved Library controls for automatic updates, visible native-watcher/periodic-scan status, ignored-event filtering, and real filesystem tests for create/edit/rename/delete events. Earlier builds already contained the underlying V2 retrieval and indexing components; this milestone completes and validates their automatic-update workflow.
+
 ## Engineering limits
 
 - Exact FAISS rebuild materializes all active profile vectors. At 100K passages a 384-dimensional float32 matrix is ~154 MB before ID/index/Python overhead; 512-dimensional CLIP adds ~205 MB for 100K visual entries. These are estimates, not measured process peaks. Full SQLite vectors plus FAISS intentionally duplicate storage.

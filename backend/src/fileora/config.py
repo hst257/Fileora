@@ -69,7 +69,7 @@ class Settings:
     enable_ocr: bool = False
     enable_media: bool = False
     enable_vision: bool = False
-    watch: bool = False
+    watch: bool | None = None
     reconcile_seconds: int = 900
     ollama_url: str = "http://127.0.0.1:11434"
     ollama_model: str = "qwen3:4b"

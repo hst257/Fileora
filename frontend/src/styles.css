@@ -875,6 +875,37 @@ audio {
 .jobs-section {
   margin-top: 43px;
 }
+.watch-section {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 22px 0;
+  margin: 0 0 28px;
+}
+.watch-section h2 {
+  font-size: 16px;
+}
+.watch-section p {
+  line-height: 1.7;
+  margin-top: 7px;
+  max-width: 640px;
+  overflow-wrap: anywhere;
+}
+.watch-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 12px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.watch-control input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+}
+.watch-warning {
+  color: #7a632d;
+}
 .job-row {
   display: flex;
   align-items: center;

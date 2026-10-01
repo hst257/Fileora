@@ -55,6 +55,16 @@ export type Health = {
   vision_enabled: boolean;
   media_enabled: boolean;
   model_setup_command?: string;
+  watch?: WatchStatus;
+};
+export type WatchStatus = {
+  enabled: boolean;
+  state: "off" | "waiting" | "watching" | "polling" | "stopped";
+  observer_active: boolean;
+  worker_active: boolean;
+  watched_roots: number;
+  reconcile_seconds: number;
+  errors: { path: string; code: string }[];
 };
 export type Job = {
   id: string;

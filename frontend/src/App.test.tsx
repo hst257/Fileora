@@ -22,7 +22,17 @@ describe("Source locations", () => {
 });
 
 describe("Workspace", () => {
-  function mockService(empty = false) {
+  function mockService(empty = false, watchFailure = false) {
+    let watchEnabled = false;
+    const watch = () => ({
+      enabled: watchEnabled,
+      state: watchEnabled ? "waiting" : "off",
+      observer_active: false,
+      worker_active: true,
+      watched_roots: 0,
+      reconcile_seconds: 900,
+      errors: [],
+    });
     vi.stubGlobal(
       "fetch",
       vi.fn(async (url: string, options?: RequestInit) => {
@@ -34,6 +44,7 @@ describe("Workspace", () => {
               semantic_ready: true,
               status: "ready",
               text_model: "local-model",
+              watch: watch(),
             }),
           );
         if (url.endsWith("/index/status"))
@@ -48,6 +59,21 @@ describe("Workspace", () => {
             }),
           );
         if (url.endsWith("/jobs")) return new Response("[]");
+        if (url.endsWith("/index/watch")) {
+          if (watchFailure)
+            return new Response(
+              JSON.stringify({
+                error: { message: "Could not save automatic updates" },
+              }),
+              { status: 500 },
+            );
+          expect(options?.method).toBe("PUT");
+          expect(new Headers(options?.headers).get("x-fileora-token")).toBe(
+            "local-test-token",
+          );
+          watchEnabled = JSON.parse(String(options?.body)).enabled;
+          return new Response(JSON.stringify(watch()));
+        }
         if (url.endsWith("/search")) {
           expect(new Headers(options?.headers).get("x-fileora-token")).toBe(
             "local-test-token",
@@ -146,5 +172,43 @@ describe("Workspace", () => {
     fireEvent.click(screen.getByRole("button", { name: /My library/ }));
     expect(screen.getByLabelText("Folder path")).toBeInTheDocument();
     expect(screen.getByText("A home for what you know.")).toBeInTheDocument();
+  });
+
+  it("saves automatic updates through the service and reflects the resulting state", async () => {
+    mockService();
+    render(<App />);
+    fireEvent.click(screen.getByRole("button", { name: /My library/ }));
+    const toggle = screen.getByRole("switch", { name: "Watch folders" });
+    await waitFor(() => expect(toggle).toBeEnabled());
+    expect(toggle).not.toBeChecked();
+    fireEvent.click(toggle);
+    await waitFor(() => expect(toggle).toBeChecked());
+    expect(
+      screen.getByText("Automatic updates are on. Add a folder to begin."),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/Your preference is saved on this device/),
+    ).toBeInTheDocument();
+    await waitFor(() => expect(toggle).toBeEnabled());
+    fireEvent.click(toggle);
+    await waitFor(() => expect(toggle).not.toBeChecked());
+    expect(screen.getByText(/Automatic updates are off/)).toBeInTheDocument();
+  });
+
+  it("restores the watch switch when saving the preference fails", async () => {
+    mockService(false, true);
+    render(<App />);
+    fireEvent.click(screen.getByRole("button", { name: /My library/ }));
+    const toggle = screen.getByRole("switch", { name: "Watch folders" });
+    await waitFor(() => expect(toggle).toBeEnabled());
+    fireEvent.click(toggle);
+    expect(toggle).toBeChecked();
+    await waitFor(() =>
+      expect(screen.getByRole("alert")).toHaveTextContent(
+        "Could not save automatic updates",
+      ),
+    );
+    expect(toggle).not.toBeChecked();
+    expect(toggle).toBeEnabled();
   });
 });

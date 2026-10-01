@@ -5,7 +5,9 @@ import re
 
 import numpy as np
 import pytest
+from fastapi.testclient import TestClient
 
+from fileora.api import create_app
 from fileora.config import Settings
 from fileora.extraction import extract
 from fileora.service import Service
@@ -81,3 +83,10 @@ def corpus(tmp_path, service):
     service.indexer.add_root(str(folder))
     service.indexer.run(service.indexer.create_job())
     return folder
+
+
+@pytest.fixture
+def client(service, corpus):
+    with TestClient(create_app(service=service), base_url="http://127.0.0.1:8765") as client:
+        client.headers["x-fileora-token"] = client.get("/api/v1/session").json()["token"]
+        yield client

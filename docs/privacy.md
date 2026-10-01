@@ -6,6 +6,8 @@ The application binds to `127.0.0.1`. Inference loads local artifacts with `loca
 
 Only selected roots are traversed. UNC shares, overlapping roots, runtime roots, symlinks, and Windows junctions/reparse points are rejected/skipped. Relative source paths are revalidated at preview time, including parent links and source stat changes. Native HTML source previews serve original PDFs/images/audio/video; code/text is served as plain text with nosniff headers.
 
+Automatic updates are off by default for a new catalog. Enabling **Watch folders** saves a boolean preference locally and observes only the selected roots while Fileora runs. Relevant events trigger reconciliation; periodic full verification catches missed events. The Library reports unavailable watchers and folders. Disabling automatic updates clears pending event hints and lets queued/running jobs finish. The preference persists across normal restarts; no background service is installed.
+
 The API validates loopback Host, exact Origin, cross-site fetch metadata, and a per-process token for mutations. CSP and frame denial protect the workspace. These controls prevent common browser cross-origin attacks; they are not authentication against another program or account already able to read the user's local files. Do not expose the service through a reverse proxy or bind it to a public network.
 
 ## What is stored

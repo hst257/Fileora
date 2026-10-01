@@ -46,7 +46,12 @@ def parser() -> argparse.ArgumentParser:
     index.add_argument("--verify", action="store_true")
     serve = sub.add_parser("serve")
     serve.add_argument("--port", type=int, default=8765)
-    serve.add_argument("--watch", action="store_true")
+    serve.add_argument(
+        "--watch",
+        action=argparse.BooleanOptionalAction,
+        default=None,
+        help="Override the saved automatic-update preference for this run",
+    )
     serve.add_argument("--ollama-model", default="qwen3:4b")
     search = sub.add_parser("search")
     search.add_argument("query")
@@ -85,6 +90,8 @@ def main() -> None:
         settings_kwargs["data_dir"] = args.data_dir
     if args.models_dir:
         settings_kwargs["models_dir"] = args.models_dir
+    if args.command == "serve":
+        settings_kwargs["watch"] = args.watch
     settings = Settings(**settings_kwargs)
     settings.prepare()
     output: Any
@@ -111,7 +118,6 @@ def main() -> None:
 
             from fileora.api import create_app
 
-            settings.watch = args.watch
             settings.ollama_model = args.ollama_model
             uvicorn.run(
                 create_app(settings), host="127.0.0.1", port=args.port, workers=1, access_log=False

@@ -24,6 +24,10 @@ class JobRequest(BaseModel):
     verify: bool = False
 
 
+class WatchRequest(BaseModel):
+    enabled: bool
+
+
 def create_app(settings: Settings | None = None, service: Service | None = None) -> FastAPI:
     service = service or Service(settings or Settings())
     token = secrets.token_urlsafe(32)
@@ -151,12 +155,21 @@ def create_app(settings: Settings | None = None, service: Service | None = None)
             "vision_enabled": service.settings.enable_vision,
             "ocr_enabled": service.settings.enable_ocr,
             "media_enabled": service.settings.enable_media,
+            "watch": service.worker.watch_status(),
             "model_setup_command": f"fileora --data-dir '{data_path}' --models-dir '{model_path}' models download {service.settings.text_model}",
         }
 
     @app.get("/api/v1/index/status")
     def status():
         return service.store.status()
+
+    @app.get("/api/v1/index/watch")
+    def watch_status():
+        return service.worker.watch_status()
+
+    @app.put("/api/v1/index/watch")
+    def configure_watch(request: WatchRequest):
+        return service.configure_watch(request.enabled)
 
     @app.post("/api/v1/search")
     def search(request: SearchRequest):

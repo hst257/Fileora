@@ -54,6 +54,19 @@ test("mobile fits without horizontal overflow", async ({ page }) => {
     path: "../docs/screenshots/mobile.png",
     fullPage: true,
   });
+  await page.getByRole("button", { name: /My library/ }).click();
+  await expect(
+    page.getByRole("switch", { name: "Watch folders" }),
+  ).toBeVisible();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: "../docs/screenshots/library-mobile.png",
+    fullPage: true,
+  });
 });
 
 test("hybrid keywords do not fill unrelated file-type tabs", async ({
@@ -95,6 +108,33 @@ test("API documentation loads entirely from localhost", async ({ page }) => {
     "Fileora local API",
   );
   expect(remote).toEqual([]);
+});
+
+test("automatic updates can be changed from Library and survive a page reload", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const before = await (await page.request.get("/api/v1/index/watch")).json();
+  const session = await (await page.request.get("/api/v1/session")).json();
+  try {
+    await page.getByRole("button", { name: /My library/ }).click();
+    const toggle = page.getByRole("switch", { name: "Watch folders" });
+    await expect(toggle).toBeEnabled();
+    await toggle.setChecked(true);
+    await expect(toggle).toBeChecked();
+    await expect(page.getByText(/^Watching \d+ folders?\.$/)).toBeVisible();
+    await page.reload();
+    await page.getByRole("button", { name: /My library/ }).click();
+    await expect(toggle).toBeChecked();
+    await toggle.setChecked(false);
+    await expect(toggle).not.toBeChecked();
+    await expect(page.getByText(/Automatic updates are off/)).toBeVisible();
+  } finally {
+    await page.request.put("/api/v1/index/watch", {
+      headers: { "X-Fileora-Token": session.token },
+      data: { enabled: before.enabled },
+    });
+  }
 });
 
 test("audio evidence seeks the original recording to its timestamp", async ({

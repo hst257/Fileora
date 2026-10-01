@@ -19,6 +19,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/start.ps1
 
 Open **http://127.0.0.1:8765**. Select **My library**, paste an absolute folder path, and rescan. Only selected folders are read. Press Ctrl+K to search. Select a match to inspect the evidence and open its source.
 
+For V2 automatic updates, enable **Watch folders** in **My library**. Fileora saves the choice in this catalog and restores it on the next normal launch. While the app is running, it notices edits, new files, renames, and deletions; a full verification catches missed events every 15 minutes. The Library shows whether native watching is active or periodic scans are being used. Automatic updates start off for a new catalog. Disabling them lets an already queued/running scan finish. See the [V2 milestone and checks](docs/v2.md).
+
 Setup installs locked dependencies, prepares MiniLM and CLIP locally, builds the frontend, and installs portable English OCR. `-Demo` registers the authored sample corpus. `-NoModels` skips model downloads for lexical-only use. `-Media` also installs the media dependencies, Whisper, and the optional synthetic lecture fixture generator. Nothing changes the machine's execution policy: the command's `Bypass` applies only to that PowerShell process.
 
 The scripts keep catalog, model files, indexes, previews, and tool caches inside `.fileora/`. Stop the server with Ctrl+C. One process owns each catalog; stop the server before using catalog commands in the terminal.

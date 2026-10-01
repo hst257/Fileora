@@ -1,16 +1,6 @@
 from __future__ import annotations
 
 import pytest
-from fastapi.testclient import TestClient
-
-from fileora.api import create_app
-
-
-@pytest.fixture
-def client(service, corpus):
-    with TestClient(create_app(service=service), base_url="http://127.0.0.1:8765") as client:
-        client.headers["x-fileora-token"] = client.get("/api/v1/session").json()["token"]
-        yield client
 
 
 def test_search_contract(client):

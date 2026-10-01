@@ -68,6 +68,9 @@ class Service:
         self.settings = settings
         settings.prepare()
         self.store = Store(settings.data_dir)
+        if settings.watch is None:
+            preference = self.store.one("SELECT value FROM app_meta WHERE key='watch_enabled'")
+            settings.watch = bool(preference and preference["value"] == "true")
         self.models = models or Models(settings)
         self.lock = threading.RLock()
         self.indexes = VectorIndexes(self.store, settings, self.lock)
@@ -77,6 +80,16 @@ class Service:
         self.search = Search(self.store, settings, self.models, self.indexes, self.lock)
         self.worker = Worker(self.indexer)
         self.instance = InstanceLock(settings.data_dir / "instance.lock")
+
+    def configure_watch(self, enabled: bool) -> dict:
+        with self.worker.watch_lock:
+            self.worker.set_watch(enabled)
+            self.store.execute(
+                "INSERT INTO app_meta(key,value) VALUES('watch_enabled',?) "
+                "ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+                ("true" if enabled else "false",),
+            )
+            return self.worker.watch_status()
 
     def source(self, file_id: int) -> tuple[Path, dict]:
         row = self.store.one(

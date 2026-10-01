@@ -522,6 +522,7 @@ class Indexer:
         return "indexed"
 
     def run(self, job_id: str, forced_paths: set[str] | None = None) -> dict:
+        forced = {os.path.normcase(os.path.abspath(path)) for path in (forced_paths or set())}
         job = self.store.one("SELECT * FROM jobs WHERE id=?", (job_id,))
         if not job:
             raise FileoraError("NOT_FOUND", "Indexing job not found", 404)
@@ -612,7 +613,11 @@ class Indexer:
                                 root,
                                 job_id,
                                 bool(job["verify"]),
-                                str(path) in (forced_paths or set()),
+                                bool(forced)
+                                and any(
+                                    os.path.normcase(str(parent.absolute())) in forced
+                                    for parent in (path, *path.parents)
+                                ),
                             )
                             if result == "cancelled":
                                 self.store.execute(
