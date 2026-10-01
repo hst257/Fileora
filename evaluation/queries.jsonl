@@ -1,0 +1,100 @@
+{"id": "text-semaphores-1", "query": "semaphore wait and signal", "category": "exact", "family": "semaphores", "split": "dev"}
+{"id": "text-semaphores-2", "query": "Find my notes about semaphores", "category": "paraphrase", "family": "semaphores", "split": "dev"}
+{"id": "text-semaphores-3", "query": "How can threads protect a critical section?", "category": "paraphrase", "family": "semaphores", "split": "dev"}
+{"id": "text-semaphores-4", "query": "binary semaphore versus mutex ownership", "category": "exact", "family": "semaphores", "split": "dev"}
+{"id": "text-semaphores-5", "query": "counting semaphore available resources", "category": "paraphrase", "family": "semaphores", "split": "dev"}
+{"id": "text-semaphores-6", "query": "wake a waiting thread", "category": "paraphrase", "family": "semaphores", "split": "dev"}
+{"id": "text-semaphores-7", "query": "counter synchronization between threads", "category": "paraphrase", "family": "semaphores", "split": "dev"}
+{"id": "text-semaphores-8", "query": "Where did I write about critical section protection?", "category": "paraphrase", "family": "semaphores", "split": "dev"}
+{"id": "text-semaphores-9", "query": "Notes discussing semaphore deadlocks", "category": "paraphrase", "family": "semaphores", "split": "dev"}
+{"id": "text-paging-1", "query": "virtual memory page table", "category": "exact", "family": "paging", "split": "dev"}
+{"id": "text-paging-2", "query": "Find the notes where paging was explained", "category": "paraphrase", "family": "paging", "split": "dev"}
+{"id": "text-paging-3", "query": "How are virtual addresses mapped to physical frames?", "category": "paraphrase", "family": "paging", "split": "dev"}
+{"id": "text-paging-4", "query": "translation lookaside buffer cache", "category": "exact", "family": "paging", "split": "dev"}
+{"id": "text-paging-5", "query": "page fault backing storage", "category": "paraphrase", "family": "paging", "split": "dev"}
+{"id": "text-paging-6", "query": "least recently used replacement", "category": "paraphrase", "family": "paging", "split": "dev"}
+{"id": "text-paging-7", "query": "demand paging only when accessed", "category": "paraphrase", "family": "paging", "split": "dev"}
+{"id": "text-paging-8", "query": "Where did I discuss memory frames?", "category": "paraphrase", "family": "paging", "split": "dev"}
+{"id": "text-paging-9", "query": "A referenced page is not present in RAM", "category": "paraphrase", "family": "paging", "split": "dev"}
+{"id": "text-scheduling-1", "query": "round robin time quantum", "category": "exact", "family": "scheduling", "split": "dev"}
+{"id": "text-scheduling-2", "query": "Find process scheduling notes", "category": "paraphrase", "family": "scheduling", "split": "dev"}
+{"id": "text-scheduling-3", "query": "Which scheduler rotates runnable processes?", "category": "paraphrase", "family": "scheduling", "split": "dev"}
+{"id": "text-scheduling-4", "query": "shortest job first CPU burst", "category": "exact", "family": "scheduling", "split": "dev"}
+{"id": "text-scheduling-5", "query": "priority scheduling aging starvation", "category": "paraphrase", "family": "scheduling", "split": "dev"}
+{"id": "text-scheduling-6", "query": "waiting time ready queue", "category": "paraphrase", "family": "scheduling", "split": "dev"}
+{"id": "text-scheduling-7", "query": "turnaround completion arrival time", "category": "paraphrase", "family": "scheduling", "split": "dev"}
+{"id": "text-scheduling-8", "query": "preempt a process when quantum expires", "category": "paraphrase", "family": "scheduling", "split": "dev"}
+{"id": "text-scheduling-9", "query": "context switching overhead", "category": "paraphrase", "family": "scheduling", "split": "dev"}
+{"id": "text-normalization-1", "query": "database normalization assignment", "category": "exact", "family": "normalization", "split": "dev"}
+{"id": "text-normalization-2", "query": "Find my notes about third normal form", "category": "paraphrase", "family": "normalization", "split": "dev"}
+{"id": "text-normalization-3", "query": "How do we remove update anomalies?", "category": "paraphrase", "family": "normalization", "split": "dev"}
+{"id": "text-normalization-4", "query": "functional dependency determinant", "category": "exact", "family": "normalization", "split": "dev"}
+{"id": "text-normalization-5", "query": "second normal form composite key", "category": "paraphrase", "family": "normalization", "split": "dev"}
+{"id": "text-normalization-6", "query": "Boyce Codd candidate key", "category": "paraphrase", "family": "normalization", "split": "dev"}
+{"id": "text-normalization-7", "query": "StudentEnrollment decomposition", "category": "paraphrase", "family": "normalization", "split": "dev"}
+{"id": "text-normalization-8", "query": "lossless relation join", "category": "paraphrase", "family": "normalization", "split": "dev"}
+{"id": "text-normalization-9", "query": "remove transitive dependencies", "category": "paraphrase", "family": "normalization", "split": "dev"}
+{"id": "text-transactions-1", "query": "write ahead logging recovery", "category": "exact", "family": "transactions", "split": "dev"}
+{"id": "text-transactions-2", "query": "Find ACID transaction notes", "category": "paraphrase", "family": "transactions", "split": "dev"}
+{"id": "text-transactions-3", "query": "How does a committed transaction survive a crash?", "category": "paraphrase", "family": "transactions", "split": "dev"}
+{"id": "text-transactions-4", "query": "two phase locking growing shrinking", "category": "exact", "family": "transactions", "split": "dev"}
+{"id": "text-transactions-5", "query": "serializable isolation serial order", "category": "paraphrase", "family": "transactions", "split": "dev"}
+{"id": "text-transactions-6", "query": "dirty read uncommitted changes", "category": "paraphrase", "family": "transactions", "split": "dev"}
+{"id": "text-transactions-7", "query": "database recovery checkpoint", "category": "paraphrase", "family": "transactions", "split": "dev"}
+{"id": "text-transactions-8", "query": "atomicity consistency isolation durability", "category": "paraphrase", "family": "transactions", "split": "dev"}
+{"id": "text-transactions-9", "query": "log records before modified pages", "category": "paraphrase", "family": "transactions", "split": "dev"}
+{"id": "text-load_balancing-1", "query": "AWS load balancing target groups", "category": "exact", "family": "load_balancing", "split": "dev"}
+{"id": "text-load_balancing-2", "query": "Find documents where I discussed AWS load balancing", "category": "paraphrase", "family": "load_balancing", "split": "dev"}
+{"id": "text-load_balancing-3", "query": "How do unhealthy EC2 instances stop receiving requests?", "category": "paraphrase", "family": "load_balancing", "split": "dev"}
+{"id": "text-load_balancing-4", "query": "host based path based listener rules", "category": "exact", "family": "load_balancing", "split": "dev"}
+{"id": "text-load_balancing-5", "query": "layer seven application load balancer", "category": "paraphrase", "family": "load_balancing", "split": "dev"}
+{"id": "text-load_balancing-6", "query": "network load balancer TCP traffic", "category": "paraphrase", "family": "load_balancing", "split": "dev"}
+{"id": "text-load_balancing-7", "query": "Auto Scaling instances based on load", "category": "paraphrase", "family": "load_balancing", "split": "dev"}
+{"id": "text-load_balancing-8", "query": "sticky sessions load distribution", "category": "paraphrase", "family": "load_balancing", "split": "dev"}
+{"id": "text-load_balancing-9", "query": "HTTP requests routed to target groups", "category": "paraphrase", "family": "load_balancing", "split": "dev"}
+{"id": "text-networking-1", "query": "TCP three way handshake", "category": "exact", "family": "networking", "split": "test"}
+{"id": "text-networking-2", "query": "Find computer network protocol notes", "category": "paraphrase", "family": "networking", "split": "test"}
+{"id": "text-networking-3", "query": "How are lost packets retransmitted?", "category": "paraphrase", "family": "networking", "split": "test"}
+{"id": "text-networking-4", "query": "DNS recursive resolver cache", "category": "exact", "family": "networking", "split": "test"}
+{"id": "text-networking-5", "query": "domain names to IP addresses", "category": "paraphrase", "family": "networking", "split": "test"}
+{"id": "text-networking-6", "query": "UDP delivery guarantees", "category": "paraphrase", "family": "networking", "split": "test"}
+{"id": "text-networking-7", "query": "congestion control sending rate", "category": "paraphrase", "family": "networking", "split": "test"}
+{"id": "text-networking-8", "query": "SYN ACK handshake messages", "category": "paraphrase", "family": "networking", "split": "test"}
+{"id": "text-networking-9", "query": "time to live DNS answers", "category": "paraphrase", "family": "networking", "split": "test"}
+{"id": "text-dijkstra-1", "query": "Dijkstra priority queue shortest path", "category": "exact", "family": "dijkstra", "split": "test"}
+{"id": "text-dijkstra-2", "query": "Where is my Java implementation of Dijkstra?", "category": "paraphrase", "family": "dijkstra", "split": "test"}
+{"id": "text-dijkstra-3", "query": "Find the algorithm for cheapest routes with nonnegative weights", "category": "paraphrase", "family": "dijkstra", "split": "test"}
+{"id": "text-dijkstra-4", "query": "graph edge relaxation tentative distance", "category": "exact", "family": "dijkstra", "split": "test"}
+{"id": "text-dijkstra-5", "query": "adjacency list weighted edges", "category": "paraphrase", "family": "dijkstra", "split": "test"}
+{"id": "text-dijkstra-6", "query": "negative edges greedy assumption", "category": "paraphrase", "family": "dijkstra", "split": "test"}
+{"id": "text-dijkstra-7", "query": "Java PriorityQueue distances", "category": "paraphrase", "family": "dijkstra", "split": "test"}
+{"id": "text-dijkstra-8", "query": "binary heap shortest path runtime", "category": "paraphrase", "family": "dijkstra", "split": "test"}
+{"id": "text-dijkstra-9", "query": "extract smallest distance neighbor update", "category": "paraphrase", "family": "dijkstra", "split": "test"}
+{"id": "text-retrieval-1", "query": "reciprocal rank fusion retrieval", "category": "exact", "family": "retrieval", "split": "test"}
+{"id": "text-retrieval-2", "query": "Find my notes about semantic embeddings", "category": "paraphrase", "family": "retrieval", "split": "test"}
+{"id": "text-retrieval-3", "query": "Why should I normalize vectors for cosine search?", "category": "paraphrase", "family": "retrieval", "split": "test"}
+{"id": "text-retrieval-4", "query": "BM25 term frequency inverse document frequency", "category": "exact", "family": "retrieval", "split": "test"}
+{"id": "text-retrieval-5", "query": "cross encoder query passage pairs", "category": "paraphrase", "family": "retrieval", "split": "test"}
+{"id": "text-retrieval-6", "query": "metadata eligible documents before retrieval", "category": "paraphrase", "family": "retrieval", "split": "test"}
+{"id": "text-retrieval-7", "query": "dense embedding natural language query", "category": "paraphrase", "family": "retrieval", "split": "test"}
+{"id": "text-retrieval-8", "query": "incompatible raw ranking scores", "category": "paraphrase", "family": "retrieval", "split": "test"}
+{"id": "text-retrieval-9", "query": "rerank a small candidate set", "category": "paraphrase", "family": "retrieval", "split": "test"}
+{"id": "text-testing-1", "query": "idempotent indexing duplicate evidence", "category": "exact", "family": "testing", "split": "test"}
+{"id": "text-testing-2", "query": "Find my notes about regression tests", "category": "paraphrase", "family": "testing", "split": "test"}
+{"id": "text-testing-3", "query": "How do content hashes invalidate cached processing?", "category": "paraphrase", "family": "testing", "split": "test"}
+{"id": "text-testing-4", "query": "unit versus integration tests", "category": "exact", "family": "testing", "split": "test"}
+{"id": "text-testing-5", "query": "rebuild derived indexes crash recovery", "category": "paraphrase", "family": "testing", "split": "test"}
+{"id": "text-testing-6", "query": "filesystem watchers missed events reconciliation", "category": "paraphrase", "family": "testing", "split": "test"}
+{"id": "text-testing-7", "query": "deterministic fixtures reproducible failures", "category": "paraphrase", "family": "testing", "split": "test"}
+{"id": "text-testing-8", "query": "prevent a previously fixed bug", "category": "paraphrase", "family": "testing", "split": "test"}
+{"id": "text-testing-9", "query": "source bytes change cache", "category": "paraphrase", "family": "testing", "split": "test"}
+{"id": "missing-1", "query": "medieval French poetry", "category": "no_match", "family": "missing-0", "split": "dev"}
+{"id": "missing-2", "query": "my invoice for a red bicycle", "category": "no_match", "family": "missing-1", "split": "dev"}
+{"id": "missing-3", "query": "a recipe for sourdough bread", "category": "no_match", "family": "missing-2", "split": "dev"}
+{"id": "missing-4", "query": "hotel booking in Iceland", "category": "no_match", "family": "missing-3", "split": "dev"}
+{"id": "missing-5", "query": "photos of coral reef fish", "category": "no_match", "family": "missing-4", "split": "dev"}
+{"id": "missing-6", "query": "mortgage amortization statement", "category": "no_match", "family": "missing-5", "split": "dev"}
+{"id": "missing-7", "query": "birthday party invitation", "category": "no_match", "family": "missing-6", "split": "test"}
+{"id": "missing-8", "query": "a map of the moon", "category": "no_match", "family": "missing-7", "split": "test"}
+{"id": "missing-9", "query": "travel itinerary for Peru", "category": "no_match", "family": "missing-8", "split": "test"}
+{"id": "missing-10", "query": "the guitar chords to my song", "category": "no_match", "family": "missing-9", "split": "test"}

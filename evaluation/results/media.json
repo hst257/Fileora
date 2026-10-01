@@ -1,0 +1,821 @@
+{
+  "dataset_hash": "b948c20b349d0eb84c3e7e75710a44ca58484c6ef1b18513359800ed544b250d",
+  "corpus_hash": "7ff4c14fccba888b9184b014643c49eab48e22215cc6b5851a3a376b6d52ae4f",
+  "lock_hash": "927717584be7c3d4e09b0c003c539808b5eb617aaebb9e2317302e4a2a81393a",
+  "catalog_generation": 125,
+  "corpus_files": 19,
+  "corpus_chunks": 43,
+  "features": {
+    "ocr": false,
+    "vision": false,
+    "media": true
+  },
+  "git_revision": "uncommitted",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "python": "3.11.8",
+  "dependencies": {
+    "fileora": "0.1.0",
+    "numpy": "2.4.6",
+    "faiss-cpu": "1.15.1",
+    "fastapi": "0.142.2",
+    "pypdf": "6.19.0",
+    "pillow": "12.3.0",
+    "torch": "2.14.1+cpu",
+    "sentence-transformers": "5.7.0",
+    "transformers": "5.18.0",
+    "faster-whisper": "1.2.1",
+    "ctranslate2": "4.8.2",
+    "av": "17.1.0",
+    "pytesseract": "0.3.13",
+    "swagger-ui-bundle": "1.1.0"
+  },
+  "mode": "hybrid",
+  "channels": "all",
+  "rerank": false,
+  "split": "all",
+  "device": "cpu",
+  "peak_process_rss_bytes": 540897280,
+  "profiles": [
+    {
+      "id": "8cb8c64de236fe8ef56ae963",
+      "model": "sentence-transformers/all-MiniLM-L6-v2",
+      "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "dimension": 384,
+      "modality": "text"
+    },
+    {
+      "id": "18524bc3f594dfbdfa050f1c",
+      "model": "openai/clip-vit-base-patch32",
+      "revision": "3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+      "dimension": 512,
+      "modality": "vision"
+    }
+  ],
+  "chunk_tokens": 192,
+  "overlap_tokens": 32,
+  "cold_search_ms": 6740.989999962039,
+  "warm_p50_ms": 37.8674499806948,
+  "warm_p95_ms": 55.17089001368731,
+  "sizes": {
+    "database_bytes": 376832,
+    "index_bytes": 38772,
+    "asset_bytes": 397015
+  },
+  "metrics": {
+    "queries": 20,
+    "answerable": 20,
+    "evidence_recall": 1.0,
+    "at_1": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "hit_rate": 1.0,
+      "mrr": 1.0,
+      "ndcg": 1.0
+    },
+    "at_5": {
+      "precision": 0.2,
+      "recall": 1.0,
+      "hit_rate": 1.0,
+      "mrr": 1.0,
+      "ndcg": 1.0
+    },
+    "at_10": {
+      "precision": 0.1,
+      "recall": 1.0,
+      "hit_rate": 1.0,
+      "mrr": 1.0,
+      "ndcg": 1.0
+    },
+    "no_match_false_positive_rate": null
+  },
+  "categories": {
+    "lecture": {
+      "queries": 20,
+      "answerable": 20,
+      "evidence_recall": 1.0,
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "no_match_false_positive_rate": null
+    }
+  },
+  "splits": {
+    "dev": {
+      "queries": 20,
+      "answerable": 20,
+      "evidence_recall": 1.0,
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "no_match_false_positive_rate": null
+    }
+  },
+  "queries": [
+    {
+      "query_id": "media-1",
+      "category": "lecture",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "computer_science_lecture.wav"
+      ],
+      "latency_ms": 6740.989999962039,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "media-2",
+      "category": "lecture",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "computer_science_lecture.wav"
+      ],
+      "latency_ms": 35.76160001102835,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "media-3",
+      "category": "lecture",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "computer_science_lecture.wav"
+      ],
+      "latency_ms": 29.14289990440011,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "media-4",
+      "category": "lecture",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "computer_science_lecture.wav"
+      ],
+      "latency_ms": 44.6647999342531,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "media-5",
+      "category": "lecture",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "computer_science_lecture.wav"
+      ],
+      "latency_ms": 31.398999970406294,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "media-6",
+      "category": "lecture",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "computer_science_lecture.wav"
+      ],
+      "latency_ms": 46.868299948982894,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "media-7",
+      "category": "lecture",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "computer_science_lecture.wav"
+      ],
+      "latency_ms": 44.34110003057867,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "media-8",
+      "category": "lecture",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "computer_science_lecture.wav"
+      ],
+      "latency_ms": 56.63879995699972,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "media-9",
+      "category": "lecture",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "computer_science_lecture.wav"
+      ],
+      "latency_ms": 53.98930003866553,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "media-10",
+      "category": "lecture",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "computer_science_lecture.wav"
+      ],
+      "latency_ms": 39.986500050872564,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "media-11",
+      "category": "lecture",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "computer_science_lecture.wav"
+      ],
+      "latency_ms": 41.896100039593875,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "media-12",
+      "category": "lecture",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "computer_science_lecture.wav"
+      ],
+      "latency_ms": 34.21269997488707,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "media-13",
+      "category": "lecture",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "computer_science_lecture.wav"
+      ],
+      "latency_ms": 31.779900076799095,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "media-14",
+      "category": "lecture",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "computer_science_lecture.wav"
+      ],
+      "latency_ms": 43.65089989732951,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "media-15",
+      "category": "lecture",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "computer_science_lecture.wav"
+      ],
+      "latency_ms": 42.989499983377755,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "media-16",
+      "category": "lecture",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "computer_science_lecture.wav"
+      ],
+      "latency_ms": 41.382000083103776,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "media-17",
+      "category": "lecture",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "computer_science_lecture.wav"
+      ],
+      "latency_ms": 48.6424999544397,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "media-18",
+      "category": "lecture",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "computer_science_lecture.wav"
+      ],
+      "latency_ms": 46.42399994190782,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "media-19",
+      "category": "lecture",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "computer_science_lecture.wav"
+      ],
+      "latency_ms": 26.964399963617325,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "media-20",
+      "category": "lecture",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "computer_science_lecture.wav"
+      ],
+      "latency_ms": 32.760299975052476,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    }
+  ],
+  "speech": {
+    "wer": 0.06481481481481481,
+    "edits": 7,
+    "reference_words": 108,
+    "hypothesis_words": 110,
+    "reference": "A semaphore coordinates concurrent threads. The wait operation decrements a counter and may block a thread. The signal operation increments the counter and wakes a waiting thread. A binary semaphore protects a critical section. Paging divides virtual memory into pages and physical memory into frames. A page table maps a virtual page to a physical frame. The translation lookaside buffer caches address translations. A page fault means a page must be loaded from storage. Database normalization removes redundant data and update anomalies. A functional dependency means one attribute determines another. Third normal form removes transitive dependencies. A lossless decomposition preserves the original relation when the tables are joined.",
+    "hypothesis": "A semaphorical ordinate's concurrent threads The weight operation decrements a counter, and may block a thread The signal operation increments the counter, and wakes a wading thread A binary semaphore protects a critical section Paging divides virtual memory into pages And physical memory into frames A page table maps a virtual page to a physical frame The translation loca side buffer caches address translations A page fault means a page must be loaded from storage database Normalization removes redundant data, and update anomalies A functional dependency means one attribute determines another Third normal form removes transitive dependencies A lossless decomposition preserves the original relation when the tables are joined",
+    "model": "Systran/faster-whisper-base.en",
+    "segments": 13
+  }
+}

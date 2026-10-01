@@ -1,0 +1,1 @@
+{"name":"fileora-local-ocr","private":true,"description":"Offline portable Tesseract engine for Windows without a system installer","dependencies":{"tesseract.js":"^6.0.1","@tesseract.js-data/eng":"^1.0.0"}}

@@ -1,0 +1,46 @@
+[
+  {
+    "title": "Semaphores",
+    "text": "A semaphore coordinates concurrent threads. The wait operation decrements a counter and may block a thread. The signal operation increments the counter and wakes a waiting thread. A binary semaphore protects a critical section.",
+    "start_ms": 0,
+    "end_ms": 26435,
+    "queries": [
+      "semaphore wait operation",
+      "threads waiting for a signal",
+      "binary semaphore critical section",
+      "increment semaphore counter",
+      "coordinate concurrent threads",
+      "decrement counter and block",
+      "semaphore synchronization lecture"
+    ]
+  },
+  {
+    "title": "Paging",
+    "text": "Paging divides virtual memory into pages and physical memory into frames. A page table maps a virtual page to a physical frame. The translation lookaside buffer caches address translations. A page fault means a page must be loaded from storage.",
+    "start_ms": 26435,
+    "end_ms": 56415,
+    "queries": [
+      "lecture explaining paging",
+      "virtual memory physical frames",
+      "page table address mapping",
+      "translation lookaside buffer",
+      "page fault storage",
+      "divide memory into pages",
+      "cached address translations"
+    ]
+  },
+  {
+    "title": "Normalization",
+    "text": "Database normalization removes redundant data and update anomalies. A functional dependency means one attribute determines another. Third normal form removes transitive dependencies. A lossless decomposition preserves the original relation when the tables are joined.",
+    "start_ms": 56415,
+    "end_ms": 86902,
+    "queries": [
+      "database normalization lecture",
+      "remove redundant data",
+      "third normal form dependencies",
+      "functional dependency attributes",
+      "lossless table decomposition",
+      "update anomalies in a database"
+    ]
+  }
+]

@@ -1,0 +1,24 @@
+{
+  "kind": "synthetic normalized vectors; excludes model inference, extraction, FTS and relevance",
+  "seed": 20261001,
+  "platform": "Windows-10-10.0.26200-SP0",
+  "count": 100000,
+  "dimension": 384,
+  "faiss": "1.15.1",
+  "numpy": "2.4.6",
+  "populate_seconds": 3.8656111999880522,
+  "build_snapshot_seconds": 2.484472500043921,
+  "peak_process_rss_bytes": 562253824,
+  "database_bytes": 218787840,
+  "snapshot_bytes": 154400090,
+  "timings": {
+    "unfiltered": {
+      "p50_ms": 12.448450026568025,
+      "p95_ms": 14.974255027482284
+    },
+    "filtered_10_percent": {
+      "p50_ms": 149.41689994884655,
+      "p95_ms": 170.0996149680577
+    }
+  }
+}

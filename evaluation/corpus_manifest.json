@@ -1,0 +1,74 @@
+{
+  "license": "CC0-1.0",
+  "description": "Authored synthetic study corpus; not a representative real-world benchmark",
+  "files": [
+    {
+      "path": "code/Dijkstra.java",
+      "sha256": "39763b7d35f230c4a3740538a5dfb8432d8b23020b976c8adabc451b85f5c3fd"
+    },
+    {
+      "path": "code/search.py",
+      "sha256": "bbbf84e43c9e94faf0decff1dc83077be310f820f4d48997dec57d0b5f0967e0"
+    },
+    {
+      "path": "documents/cloud_architecture.pdf",
+      "sha256": "001ef7f5636ac4ca07a485cc5de5bdaf7c45b4e8c51262cce5408a5cf4877747"
+    },
+    {
+      "path": "documents/operating_systems.pdf",
+      "sha256": "f411d4096a98cdd36b1c097b47a4ea4e69845cee4958de0e9ce3b029681cdd18"
+    },
+    {
+      "path": "notes/dijkstra.md",
+      "sha256": "c6e9db83d16092c6484552e8eb0f2378318ce20d16bb635ad663d5c9c846ee76"
+    },
+    {
+      "path": "notes/load_balancing.md",
+      "sha256": "0aaf2e53b303a2fb7050550e947cfca33bef1f5100fb66110fbbc169c155b484"
+    },
+    {
+      "path": "notes/networking.md",
+      "sha256": "98d5e1c963349ff45560ba4d52953852f0f5ee19adbceee58d496c69d56dd834"
+    },
+    {
+      "path": "notes/normalization.md",
+      "sha256": "e04d52721f83407893160b7bd650f02a76b762c8e952141cd56ebc6f1e8a978b"
+    },
+    {
+      "path": "notes/paging.md",
+      "sha256": "8e37a239ac4b30bf24702b1d82222d7ba77d996c5a34cc6aba141baf96cff407"
+    },
+    {
+      "path": "notes/retrieval.md",
+      "sha256": "d90c2c92a293d8edc1a69333c3e25432eac8e1b931ec1fcee2032a300f796a40"
+    },
+    {
+      "path": "notes/scheduling.md",
+      "sha256": "d11179cf5693e58ffeb59659f521f838181e2578ff2038828c2eb748897bfe56"
+    },
+    {
+      "path": "notes/semaphores.md",
+      "sha256": "0fdf9687c4731366f387acb9a1c5fd0c884ae04c045c0563cccfd40099864d67"
+    },
+    {
+      "path": "notes/testing.md",
+      "sha256": "059cfd6731398cde5029a56b3fbb925eba84821f11a0d230f87d8c2bbadd8a7c"
+    },
+    {
+      "path": "notes/transactions.md",
+      "sha256": "99acf2ce10ddcce856911dd25e8498ecf0e4e4116f09e0a3084189fac890b0d1"
+    },
+    {
+      "path": "screenshots/paging.png",
+      "sha256": "851f675fc861271824c837d016370cf12ee179febd3844094ddbba529f8d63f1"
+    },
+    {
+      "path": "screenshots/scheduling.png",
+      "sha256": "107855242b72cd9f7e3aa208e6530ad513fc7107a2c11a325fff918eb0c61ad8"
+    },
+    {
+      "path": "screenshots/semaphores.png",
+      "sha256": "86dec5505faf190304735a50d9806b828e2f6baa3fe5645bc9b3419a7bdfe4a0"
+    }
+  ]
+}

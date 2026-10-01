@@ -1,0 +1,3718 @@
+{
+  "dataset_hash": "1611200b9c46b9150282c88995705ffd6f2cb80f9f0aa9f273f2ca1e746c6ce1",
+  "corpus_hash": "0cb2d13630f22d64563a5e8e3828731df321ff32c62c3a3bacf85a53f48d2bbb",
+  "lock_hash": "927717584be7c3d4e09b0c003c539808b5eb617aaebb9e2317302e4a2a81393a",
+  "catalog_generation": 17,
+  "corpus_files": 17,
+  "corpus_chunks": 24,
+  "features": {
+    "ocr": true,
+    "vision": false,
+    "media": false
+  },
+  "git_revision": "uncommitted",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "python": "3.11.8",
+  "dependencies": {
+    "fileora": "0.1.0",
+    "numpy": "2.4.6",
+    "faiss-cpu": "1.15.1",
+    "fastapi": "0.142.2",
+    "pypdf": "6.19.0"
+  },
+  "mode": "lexical",
+  "channels": "all",
+  "rerank": false,
+  "split": "all",
+  "device": "cpu",
+  "peak_process_rss_bytes": 222388224,
+  "profiles": [
+    {
+      "id": "12a362bfbe8331c19cb708c2",
+      "model": "BAAI/bge-small-en-v1.5",
+      "revision": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+      "dimension": 384,
+      "modality": "text"
+    },
+    {
+      "id": "18524bc3f594dfbdfa050f1c",
+      "model": "openai/clip-vit-base-patch32",
+      "revision": "3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+      "dimension": 512,
+      "modality": "vision"
+    }
+  ],
+  "chunk_tokens": 192,
+  "overlap_tokens": 32,
+  "cold_search_ms": 23.075099918060005,
+  "warm_p50_ms": 22.142549976706505,
+  "warm_p95_ms": 50.175574998138465,
+  "sizes": {
+    "database_bytes": 237568,
+    "index_bytes": 32514,
+    "asset_bytes": 268544
+  },
+  "metrics": {
+    "queries": 100,
+    "answerable": 90,
+    "evidence_recall": 0.9888888888888889,
+    "at_1": {
+      "precision": 0.9444444444444444,
+      "recall": 0.7,
+      "hit_rate": 0.9444444444444444,
+      "mrr": 0.9444444444444444,
+      "ndcg": 0.9444444444444444
+    },
+    "at_5": {
+      "precision": 0.32222222222222224,
+      "recall": 0.9888888888888889,
+      "hit_rate": 0.9888888888888889,
+      "mrr": 0.9666666666666667,
+      "ndcg": 0.9724857668253981
+    },
+    "at_10": {
+      "precision": 0.16111111111111112,
+      "recall": 0.9888888888888889,
+      "hit_rate": 0.9888888888888889,
+      "mrr": 0.9666666666666667,
+      "ndcg": 0.9724857668253981
+    },
+    "no_match_false_positive_rate": 0.3
+  },
+  "categories": {
+    "exact": {
+      "queries": 20,
+      "answerable": 20,
+      "evidence_recall": 1.0,
+      "at_1": {
+        "precision": 0.85,
+        "recall": 0.6166666666666667,
+        "hit_rate": 0.85,
+        "mrr": 0.85,
+        "ndcg": 0.85
+      },
+      "at_5": {
+        "precision": 0.32,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 0.925,
+        "ndcg": 0.9446394630357187
+      },
+      "at_10": {
+        "precision": 0.16,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 0.925,
+        "ndcg": 0.9446394630357187
+      },
+      "no_match_false_positive_rate": null
+    },
+    "no_match": {
+      "queries": 10,
+      "answerable": 0,
+      "evidence_recall": null,
+      "at_1": {
+        "precision": 0,
+        "recall": 0,
+        "hit_rate": 0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "at_5": {
+        "precision": 0,
+        "recall": 0,
+        "hit_rate": 0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "at_10": {
+        "precision": 0,
+        "recall": 0,
+        "hit_rate": 0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "no_match_false_positive_rate": 0.3
+    },
+    "paraphrase": {
+      "queries": 70,
+      "answerable": 70,
+      "evidence_recall": 0.9857142857142858,
+      "at_1": {
+        "precision": 0.9714285714285714,
+        "recall": 0.7238095238095238,
+        "hit_rate": 0.9714285714285714,
+        "mrr": 0.9714285714285714,
+        "ndcg": 0.9714285714285714
+      },
+      "at_5": {
+        "precision": 0.32285714285714284,
+        "recall": 0.9857142857142858,
+        "hit_rate": 0.9857142857142858,
+        "mrr": 0.9785714285714285,
+        "ndcg": 0.9804418536224494
+      },
+      "at_10": {
+        "precision": 0.16142857142857142,
+        "recall": 0.9857142857142858,
+        "hit_rate": 0.9857142857142858,
+        "mrr": 0.9785714285714285,
+        "ndcg": 0.9804418536224494
+      },
+      "no_match_false_positive_rate": null
+    }
+  },
+  "splits": {
+    "dev": {
+      "queries": 60,
+      "answerable": 54,
+      "evidence_recall": 1.0,
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.6111111111111112,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "no_match_false_positive_rate": 0.3333333333333333
+    },
+    "test": {
+      "queries": 40,
+      "answerable": 36,
+      "evidence_recall": 0.9722222222222222,
+      "at_1": {
+        "precision": 0.8611111111111112,
+        "recall": 0.8333333333333334,
+        "hit_rate": 0.8611111111111112,
+        "mrr": 0.8611111111111112,
+        "ndcg": 0.8611111111111112
+      },
+      "at_5": {
+        "precision": 0.20555555555555557,
+        "recall": 0.9722222222222222,
+        "hit_rate": 0.9722222222222222,
+        "mrr": 0.9166666666666666,
+        "ndcg": 0.9312144170634953
+      },
+      "at_10": {
+        "precision": 0.10277777777777779,
+        "recall": 0.9722222222222222,
+        "hit_rate": 0.9722222222222222,
+        "mrr": 0.9166666666666666,
+        "ndcg": 0.9312144170634953
+      },
+      "no_match_false_positive_rate": 0.25
+    }
+  },
+  "queries": [
+    {
+      "query_id": "text-semaphores-1",
+      "category": "exact",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/semaphores.md",
+        "screenshots/semaphores.png",
+        "documents/operating_systems.pdf"
+      ],
+      "latency_ms": 23.075099918060005,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.3333333333333333,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.6,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.3,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-semaphores-2",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "screenshots/semaphores.png",
+        "notes/semaphores.md",
+        "documents/operating_systems.pdf"
+      ],
+      "latency_ms": 25.79200000036508,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.3333333333333333,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.6,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.3,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-semaphores-3",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "documents/operating_systems.pdf",
+        "notes/semaphores.md",
+        "screenshots/semaphores.png",
+        "notes/testing.md",
+        "notes/retrieval.md"
+      ],
+      "latency_ms": 29.204899910837412,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.3333333333333333,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.6,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.3,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-semaphores-4",
+      "category": "exact",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/semaphores.md",
+        "screenshots/semaphores.png",
+        "documents/operating_systems.pdf",
+        "notes/dijkstra.md"
+      ],
+      "latency_ms": 26.296700001694262,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.3333333333333333,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.6,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.3,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-semaphores-5",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/semaphores.md",
+        "screenshots/semaphores.png",
+        "documents/operating_systems.pdf"
+      ],
+      "latency_ms": 23.183099925518036,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.3333333333333333,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.6,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.3,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-semaphores-6",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "documents/operating_systems.pdf",
+        "notes/semaphores.md",
+        "screenshots/semaphores.png",
+        "notes/scheduling.md",
+        "screenshots/scheduling.png"
+      ],
+      "latency_ms": 27.84379990771413,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.3333333333333333,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.6,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.3,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-semaphores-7",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/semaphores.md",
+        "screenshots/semaphores.png",
+        "documents/operating_systems.pdf"
+      ],
+      "latency_ms": 19.884099951013923,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.3333333333333333,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.6,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.3,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-semaphores-8",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "documents/operating_systems.pdf",
+        "notes/semaphores.md",
+        "screenshots/semaphores.png",
+        "notes/transactions.md"
+      ],
+      "latency_ms": 23.25510000810027,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.3333333333333333,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.6,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.3,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-semaphores-9",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/semaphores.md",
+        "screenshots/semaphores.png",
+        "documents/operating_systems.pdf"
+      ],
+      "latency_ms": 18.55689997319132,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.3333333333333333,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.6,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.3,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-paging-1",
+      "category": "exact",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/paging.md",
+        "screenshots/paging.png",
+        "documents/operating_systems.pdf"
+      ],
+      "latency_ms": 18.945000017993152,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.3333333333333333,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.6,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.3,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-paging-2",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "screenshots/paging.png",
+        "notes/paging.md",
+        "documents/operating_systems.pdf"
+      ],
+      "latency_ms": 19.104699953459203,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.3333333333333333,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.6,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.3,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-paging-3",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/paging.md",
+        "screenshots/paging.png",
+        "documents/operating_systems.pdf",
+        "notes/networking.md"
+      ],
+      "latency_ms": 23.426800034940243,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.3333333333333333,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.6,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.3,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-paging-4",
+      "category": "exact",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "documents/operating_systems.pdf",
+        "notes/paging.md",
+        "screenshots/paging.png",
+        "notes/networking.md",
+        "notes/testing.md"
+      ],
+      "latency_ms": 27.64779992867261,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.3333333333333333,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.6,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.3,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-paging-5",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "documents/operating_systems.pdf",
+        "notes/paging.md",
+        "screenshots/paging.png"
+      ],
+      "latency_ms": 18.261099932715297,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.3333333333333333,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.6,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.3,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-paging-6",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "documents/operating_systems.pdf",
+        "notes/paging.md",
+        "screenshots/paging.png",
+        "notes/semaphores.md",
+        "screenshots/semaphores.png"
+      ],
+      "latency_ms": 23.537200060673058,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.3333333333333333,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.6,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.3,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-paging-7",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/paging.md",
+        "screenshots/paging.png",
+        "documents/operating_systems.pdf",
+        "notes/networking.md",
+        "notes/normalization.md",
+        "notes/scheduling.md",
+        "screenshots/scheduling.png",
+        "notes/semaphores.md",
+        "screenshots/semaphores.png",
+        "notes/testing.md"
+      ],
+      "latency_ms": 42.33700002077967,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.3333333333333333,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.6,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.3,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-paging-8",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/paging.md",
+        "screenshots/paging.png",
+        "documents/operating_systems.pdf"
+      ],
+      "latency_ms": 19.762400072067976,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.3333333333333333,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.6,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.3,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-paging-9",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "documents/operating_systems.pdf",
+        "notes/paging.md",
+        "screenshots/paging.png"
+      ],
+      "latency_ms": 18.423400004394352,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.3333333333333333,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.6,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.3,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-scheduling-1",
+      "category": "exact",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/scheduling.md",
+        "screenshots/scheduling.png",
+        "notes/networking.md",
+        "documents/operating_systems.pdf",
+        "notes/paging.md",
+        "screenshots/paging.png"
+      ],
+      "latency_ms": 28.14469998702407,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-scheduling-2",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/scheduling.md",
+        "screenshots/scheduling.png"
+      ],
+      "latency_ms": 29.576299944892526,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-scheduling-3",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/scheduling.md",
+        "screenshots/scheduling.png"
+      ],
+      "latency_ms": 16.038000001572073,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-scheduling-4",
+      "category": "exact",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/scheduling.md",
+        "screenshots/scheduling.png",
+        "code/Dijkstra.java",
+        "notes/testing.md",
+        "notes/dijkstra.md"
+      ],
+      "latency_ms": 24.581899982877076,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-scheduling-5",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/scheduling.md",
+        "screenshots/scheduling.png",
+        "code/Dijkstra.java",
+        "notes/dijkstra.md"
+      ],
+      "latency_ms": 22.679299931041896,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-scheduling-6",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/scheduling.md",
+        "screenshots/scheduling.png",
+        "code/Dijkstra.java",
+        "documents/operating_systems.pdf",
+        "notes/semaphores.md",
+        "screenshots/semaphores.png",
+        "notes/networking.md",
+        "notes/dijkstra.md",
+        "notes/paging.md",
+        "screenshots/paging.png"
+      ],
+      "latency_ms": 45.67009990569204,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-scheduling-7",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/scheduling.md",
+        "screenshots/scheduling.png",
+        "notes/networking.md",
+        "documents/operating_systems.pdf",
+        "notes/paging.md",
+        "screenshots/paging.png"
+      ],
+      "latency_ms": 33.079499960877,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-scheduling-8",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/scheduling.md",
+        "screenshots/scheduling.png",
+        "documents/operating_systems.pdf",
+        "notes/paging.md",
+        "screenshots/paging.png",
+        "notes/networking.md",
+        "notes/normalization.md",
+        "notes/semaphores.md",
+        "screenshots/semaphores.png",
+        "notes/testing.md"
+      ],
+      "latency_ms": 59.43440005648881,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-scheduling-9",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/scheduling.md",
+        "screenshots/scheduling.png"
+      ],
+      "latency_ms": 23.378700017929077,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-normalization-1",
+      "category": "exact",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/normalization.md",
+        "notes/transactions.md",
+        "notes/testing.md"
+      ],
+      "latency_ms": 20.948000019416213,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-normalization-2",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/normalization.md"
+      ],
+      "latency_ms": 21.038400009274483,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-normalization-3",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/normalization.md",
+        "documents/cloud_architecture.pdf",
+        "notes/load_balancing.md"
+      ],
+      "latency_ms": 22.392599959857762,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-normalization-4",
+      "category": "exact",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/normalization.md"
+      ],
+      "latency_ms": 19.435100024566054,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-normalization-5",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/normalization.md",
+        "code/search.py"
+      ],
+      "latency_ms": 23.071200004778802,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-normalization-6",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/normalization.md",
+        "code/Dijkstra.java",
+        "code/search.py",
+        "notes/retrieval.md"
+      ],
+      "latency_ms": 22.450400050729513,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-normalization-7",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/normalization.md"
+      ],
+      "latency_ms": 14.265200006775558,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-normalization-8",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/normalization.md"
+      ],
+      "latency_ms": 14.135200064629316,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-normalization-9",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/normalization.md",
+        "documents/cloud_architecture.pdf",
+        "notes/load_balancing.md"
+      ],
+      "latency_ms": 22.3782000830397,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-transactions-1",
+      "category": "exact",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/transactions.md",
+        "notes/testing.md"
+      ],
+      "latency_ms": 21.128299995325506,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-transactions-2",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/transactions.md"
+      ],
+      "latency_ms": 18.16590002272278,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-transactions-3",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/transactions.md",
+        "notes/testing.md"
+      ],
+      "latency_ms": 21.25190000515431,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-transactions-4",
+      "category": "exact",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/transactions.md"
+      ],
+      "latency_ms": 13.442000024951994,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-transactions-5",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/transactions.md"
+      ],
+      "latency_ms": 15.70520002860576,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-transactions-6",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/transactions.md"
+      ],
+      "latency_ms": 13.528000097721815,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-transactions-7",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/transactions.md",
+        "notes/testing.md",
+        "notes/normalization.md"
+      ],
+      "latency_ms": 23.2195999706164,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-transactions-8",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/transactions.md"
+      ],
+      "latency_ms": 21.23269997537136,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-transactions-9",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/transactions.md",
+        "notes/retrieval.md",
+        "notes/testing.md",
+        "notes/dijkstra.md",
+        "documents/operating_systems.pdf",
+        "notes/paging.md",
+        "screenshots/paging.png"
+      ],
+      "latency_ms": 47.078299918212,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-load_balancing-1",
+      "category": "exact",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/load_balancing.md",
+        "documents/cloud_architecture.pdf"
+      ],
+      "latency_ms": 24.991199956275523,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-load_balancing-2",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/load_balancing.md",
+        "documents/cloud_architecture.pdf"
+      ],
+      "latency_ms": 25.764500023797154,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-load_balancing-3",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "documents/cloud_architecture.pdf",
+        "notes/load_balancing.md"
+      ],
+      "latency_ms": 25.44799994211644,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-load_balancing-4",
+      "category": "exact",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "documents/cloud_architecture.pdf",
+        "notes/load_balancing.md",
+        "notes/dijkstra.md"
+      ],
+      "latency_ms": 32.01600001193583,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-load_balancing-5",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/load_balancing.md",
+        "documents/cloud_architecture.pdf"
+      ],
+      "latency_ms": 28.96359993610531,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-load_balancing-6",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/load_balancing.md",
+        "documents/cloud_architecture.pdf",
+        "notes/networking.md"
+      ],
+      "latency_ms": 32.021199935115874,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-load_balancing-7",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/load_balancing.md",
+        "documents/cloud_architecture.pdf"
+      ],
+      "latency_ms": 22.805799962952733,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-load_balancing-8",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "notes/load_balancing.md",
+        "documents/cloud_architecture.pdf"
+      ],
+      "latency_ms": 22.500300081446767,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-load_balancing-9",
+      "category": "paraphrase",
+      "split": "dev",
+      "answerable": true,
+      "results": [
+        "documents/cloud_architecture.pdf",
+        "notes/load_balancing.md"
+      ],
+      "latency_ms": 24.01369996368885,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-networking-1",
+      "category": "exact",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/networking.md",
+        "documents/cloud_architecture.pdf",
+        "notes/load_balancing.md"
+      ],
+      "latency_ms": 23.91009998973459,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-networking-2",
+      "category": "paraphrase",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/networking.md",
+        "documents/cloud_architecture.pdf",
+        "notes/load_balancing.md"
+      ],
+      "latency_ms": 23.71139999013394,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-networking-3",
+      "category": "paraphrase",
+      "split": "test",
+      "answerable": true,
+      "results": [],
+      "latency_ms": 7.827800000086427,
+      "warnings": [],
+      "at_1": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0.0
+      },
+      "at_5": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0.0
+      },
+      "at_10": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0.0
+      },
+      "evidence_recall": 0.0
+    },
+    {
+      "query_id": "text-networking-4",
+      "category": "exact",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/networking.md",
+        "notes/testing.md"
+      ],
+      "latency_ms": 14.733399963006377,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-networking-5",
+      "category": "paraphrase",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/networking.md"
+      ],
+      "latency_ms": 23.081399966031313,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-networking-6",
+      "category": "paraphrase",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/networking.md"
+      ],
+      "latency_ms": 21.400499972514808,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-networking-7",
+      "category": "paraphrase",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/networking.md"
+      ],
+      "latency_ms": 20.20149992313236,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-networking-8",
+      "category": "paraphrase",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/networking.md"
+      ],
+      "latency_ms": 20.117499982006848,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-networking-9",
+      "category": "paraphrase",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/networking.md",
+        "notes/scheduling.md",
+        "screenshots/scheduling.png",
+        "documents/operating_systems.pdf",
+        "notes/paging.md",
+        "screenshots/paging.png"
+      ],
+      "latency_ms": 44.18309999164194,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-dijkstra-1",
+      "category": "exact",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "code/Dijkstra.java",
+        "notes/dijkstra.md",
+        "notes/scheduling.md",
+        "screenshots/scheduling.png",
+        "documents/cloud_architecture.pdf",
+        "notes/load_balancing.md"
+      ],
+      "latency_ms": 42.8533999947831,
+      "warnings": [],
+      "at_1": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 0.5,
+        "ndcg": 0.6309297535714574
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 0.5,
+        "ndcg": 0.6309297535714574
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-dijkstra-2",
+      "category": "paraphrase",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/dijkstra.md",
+        "code/Dijkstra.java"
+      ],
+      "latency_ms": 27.806000085547566,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-dijkstra-3",
+      "category": "paraphrase",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/dijkstra.md",
+        "code/Dijkstra.java",
+        "documents/cloud_architecture.pdf",
+        "notes/load_balancing.md",
+        "code/search.py",
+        "notes/networking.md",
+        "documents/operating_systems.pdf",
+        "notes/semaphores.md",
+        "screenshots/semaphores.png",
+        "notes/paging.md"
+      ],
+      "latency_ms": 66.00959994830191,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-dijkstra-4",
+      "category": "exact",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "code/Dijkstra.java",
+        "notes/dijkstra.md"
+      ],
+      "latency_ms": 29.78920005261898,
+      "warnings": [],
+      "at_1": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 0.5,
+        "ndcg": 0.6309297535714574
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 0.5,
+        "ndcg": 0.6309297535714574
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-dijkstra-5",
+      "category": "paraphrase",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/dijkstra.md",
+        "code/Dijkstra.java"
+      ],
+      "latency_ms": 38.52359997108579,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-dijkstra-6",
+      "category": "paraphrase",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/dijkstra.md"
+      ],
+      "latency_ms": 23.749400046654046,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-dijkstra-7",
+      "category": "paraphrase",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/dijkstra.md",
+        "code/Dijkstra.java",
+        "notes/scheduling.md",
+        "screenshots/scheduling.png"
+      ],
+      "latency_ms": 36.910400027409196,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.4,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-dijkstra-8",
+      "category": "paraphrase",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/dijkstra.md",
+        "code/Dijkstra.java",
+        "documents/cloud_architecture.pdf",
+        "notes/load_balancing.md",
+        "documents/operating_systems.pdf",
+        "notes/semaphores.md",
+        "screenshots/semaphores.png",
+        "notes/scheduling.md",
+        "screenshots/scheduling.png"
+      ],
+      "latency_ms": 67.7855999674648,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-dijkstra-9",
+      "category": "paraphrase",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/dijkstra.md",
+        "code/Dijkstra.java",
+        "notes/normalization.md",
+        "notes/scheduling.md",
+        "screenshots/scheduling.png"
+      ],
+      "latency_ms": 32.31390006840229,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-retrieval-1",
+      "category": "exact",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "code/search.py",
+        "notes/retrieval.md"
+      ],
+      "latency_ms": 24.214399978518486,
+      "warnings": [],
+      "at_1": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 0.5,
+        "ndcg": 0.6309297535714574
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 0.5,
+        "ndcg": 0.6309297535714574
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-retrieval-2",
+      "category": "paraphrase",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/retrieval.md",
+        "code/search.py"
+      ],
+      "latency_ms": 21.666400018148124,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-retrieval-3",
+      "category": "paraphrase",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/retrieval.md",
+        "code/search.py",
+        "code/Dijkstra.java",
+        "notes/networking.md",
+        "documents/operating_systems.pdf",
+        "notes/semaphores.md",
+        "screenshots/semaphores.png",
+        "notes/dijkstra.md",
+        "notes/paging.md",
+        "screenshots/paging.png"
+      ],
+      "latency_ms": 59.129299945198,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-retrieval-4",
+      "category": "exact",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/retrieval.md"
+      ],
+      "latency_ms": 17.07399997394532,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-retrieval-5",
+      "category": "paraphrase",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/retrieval.md"
+      ],
+      "latency_ms": 18.824199913069606,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-retrieval-6",
+      "category": "paraphrase",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/retrieval.md",
+        "code/search.py",
+        "notes/transactions.md"
+      ],
+      "latency_ms": 25.591199984773993,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-retrieval-7",
+      "category": "paraphrase",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/retrieval.md"
+      ],
+      "latency_ms": 16.986300004646182,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-retrieval-8",
+      "category": "paraphrase",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "code/search.py",
+        "notes/retrieval.md"
+      ],
+      "latency_ms": 20.17619996331632,
+      "warnings": [],
+      "at_1": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 0.5,
+        "ndcg": 0.6309297535714574
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 0.5,
+        "ndcg": 0.6309297535714574
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-retrieval-9",
+      "category": "paraphrase",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/retrieval.md",
+        "notes/normalization.md",
+        "code/Dijkstra.java"
+      ],
+      "latency_ms": 27.84979995340109,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-testing-1",
+      "category": "exact",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/testing.md"
+      ],
+      "latency_ms": 20.390400080941617,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-testing-2",
+      "category": "paraphrase",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/testing.md"
+      ],
+      "latency_ms": 17.292700009420514,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-testing-3",
+      "category": "paraphrase",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/testing.md"
+      ],
+      "latency_ms": 17.64460001140833,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-testing-4",
+      "category": "exact",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/testing.md"
+      ],
+      "latency_ms": 18.543399986810982,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-testing-5",
+      "category": "paraphrase",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/testing.md",
+        "notes/transactions.md"
+      ],
+      "latency_ms": 20.73200000450015,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-testing-6",
+      "category": "paraphrase",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/testing.md"
+      ],
+      "latency_ms": 21.631000097841024,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-testing-7",
+      "category": "paraphrase",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/testing.md"
+      ],
+      "latency_ms": 14.359400025568902,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-testing-8",
+      "category": "paraphrase",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/testing.md",
+        "documents/operating_systems.pdf",
+        "notes/paging.md",
+        "screenshots/paging.png"
+      ],
+      "latency_ms": 24.919599993154407,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "text-testing-9",
+      "category": "paraphrase",
+      "split": "test",
+      "answerable": true,
+      "results": [
+        "notes/testing.md",
+        "code/Dijkstra.java",
+        "notes/networking.md"
+      ],
+      "latency_ms": 22.81959995161742,
+      "warnings": [],
+      "at_1": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_5": {
+        "precision": 0.2,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "at_10": {
+        "precision": 0.1,
+        "recall": 1.0,
+        "hit_rate": 1.0,
+        "mrr": 1.0,
+        "ndcg": 1.0
+      },
+      "evidence_recall": 1.0
+    },
+    {
+      "query_id": "missing-1",
+      "category": "no_match",
+      "split": "dev",
+      "answerable": false,
+      "results": [],
+      "latency_ms": 7.058899966068566,
+      "warnings": [],
+      "at_1": {
+        "precision": 0.0,
+        "recall": 0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "at_5": {
+        "precision": 0.0,
+        "recall": 0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "at_10": {
+        "precision": 0.0,
+        "recall": 0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "evidence_recall": null
+    },
+    {
+      "query_id": "missing-2",
+      "category": "no_match",
+      "split": "dev",
+      "answerable": false,
+      "results": [
+        "code/search.py",
+        "code/Dijkstra.java",
+        "notes/networking.md",
+        "documents/operating_systems.pdf",
+        "notes/semaphores.md",
+        "screenshots/semaphores.png",
+        "notes/dijkstra.md",
+        "notes/paging.md",
+        "screenshots/paging.png"
+      ],
+      "latency_ms": 55.33729994203895,
+      "warnings": [],
+      "at_1": {
+        "precision": 0.0,
+        "recall": 0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "at_5": {
+        "precision": 0.0,
+        "recall": 0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "at_10": {
+        "precision": 0.0,
+        "recall": 0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "evidence_recall": null
+    },
+    {
+      "query_id": "missing-3",
+      "category": "no_match",
+      "split": "dev",
+      "answerable": false,
+      "results": [
+        "code/search.py",
+        "code/Dijkstra.java",
+        "notes/networking.md",
+        "documents/operating_systems.pdf",
+        "notes/semaphores.md",
+        "screenshots/semaphores.png",
+        "notes/dijkstra.md",
+        "notes/paging.md",
+        "screenshots/paging.png"
+      ],
+      "latency_ms": 44.62699999567121,
+      "warnings": [],
+      "at_1": {
+        "precision": 0.0,
+        "recall": 0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "at_5": {
+        "precision": 0.0,
+        "recall": 0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "at_10": {
+        "precision": 0.0,
+        "recall": 0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "evidence_recall": null
+    },
+    {
+      "query_id": "missing-4",
+      "category": "no_match",
+      "split": "dev",
+      "answerable": false,
+      "results": [],
+      "latency_ms": 7.33110005967319,
+      "warnings": [],
+      "at_1": {
+        "precision": 0.0,
+        "recall": 0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "at_5": {
+        "precision": 0.0,
+        "recall": 0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "at_10": {
+        "precision": 0.0,
+        "recall": 0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "evidence_recall": null
+    },
+    {
+      "query_id": "missing-5",
+      "category": "no_match",
+      "split": "dev",
+      "answerable": false,
+      "results": [],
+      "latency_ms": 8.35469993762672,
+      "warnings": [],
+      "at_1": {
+        "precision": 0.0,
+        "recall": 0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "at_5": {
+        "precision": 0.0,
+        "recall": 0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "at_10": {
+        "precision": 0.0,
+        "recall": 0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "evidence_recall": null
+    },
+    {
+      "query_id": "missing-6",
+      "category": "no_match",
+      "split": "dev",
+      "answerable": false,
+      "results": [],
+      "latency_ms": 10.588399949483573,
+      "warnings": [],
+      "at_1": {
+        "precision": 0.0,
+        "recall": 0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "at_5": {
+        "precision": 0.0,
+        "recall": 0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "at_10": {
+        "precision": 0.0,
+        "recall": 0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "evidence_recall": null
+    },
+    {
+      "query_id": "missing-7",
+      "category": "no_match",
+      "split": "test",
+      "answerable": false,
+      "results": [],
+      "latency_ms": 15.318699995987117,
+      "warnings": [],
+      "at_1": {
+        "precision": 0.0,
+        "recall": 0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "at_5": {
+        "precision": 0.0,
+        "recall": 0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "at_10": {
+        "precision": 0.0,
+        "recall": 0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "evidence_recall": null
+    },
+    {
+      "query_id": "missing-8",
+      "category": "no_match",
+      "split": "test",
+      "answerable": false,
+      "results": [],
+      "latency_ms": 12.803700054064393,
+      "warnings": [],
+      "at_1": {
+        "precision": 0.0,
+        "recall": 0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "at_5": {
+        "precision": 0.0,
+        "recall": 0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "at_10": {
+        "precision": 0.0,
+        "recall": 0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "evidence_recall": null
+    },
+    {
+      "query_id": "missing-9",
+      "category": "no_match",
+      "split": "test",
+      "answerable": false,
+      "results": [
+        "code/search.py",
+        "code/Dijkstra.java",
+        "notes/networking.md",
+        "documents/operating_systems.pdf",
+        "notes/semaphores.md",
+        "screenshots/semaphores.png",
+        "notes/dijkstra.md",
+        "notes/paging.md",
+        "screenshots/paging.png"
+      ],
+      "latency_ms": 56.57270003575832,
+      "warnings": [],
+      "at_1": {
+        "precision": 0.0,
+        "recall": 0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "at_5": {
+        "precision": 0.0,
+        "recall": 0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "at_10": {
+        "precision": 0.0,
+        "recall": 0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "evidence_recall": null
+    },
+    {
+      "query_id": "missing-10",
+      "category": "no_match",
+      "split": "test",
+      "answerable": false,
+      "results": [],
+      "latency_ms": 9.954400011338294,
+      "warnings": [],
+      "at_1": {
+        "precision": 0.0,
+        "recall": 0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "at_5": {
+        "precision": 0.0,
+        "recall": 0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "at_10": {
+        "precision": 0.0,
+        "recall": 0,
+        "hit_rate": 0.0,
+        "mrr": 0,
+        "ndcg": 0
+      },
+      "evidence_recall": null
+    }
+  ]
+}

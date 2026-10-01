@@ -1,0 +1,20 @@
+{"id": "media-1", "query": "semaphore wait operation", "category": "lecture", "family": "Semaphores", "split": "dev", "filters": {"modality": "audio"}}
+{"id": "media-2", "query": "threads waiting for a signal", "category": "lecture", "family": "Semaphores", "split": "dev", "filters": {"modality": "audio"}}
+{"id": "media-3", "query": "binary semaphore critical section", "category": "lecture", "family": "Semaphores", "split": "dev", "filters": {"modality": "audio"}}
+{"id": "media-4", "query": "increment semaphore counter", "category": "lecture", "family": "Semaphores", "split": "dev", "filters": {"modality": "audio"}}
+{"id": "media-5", "query": "coordinate concurrent threads", "category": "lecture", "family": "Semaphores", "split": "dev", "filters": {"modality": "audio"}}
+{"id": "media-6", "query": "decrement counter and block", "category": "lecture", "family": "Semaphores", "split": "dev", "filters": {"modality": "audio"}}
+{"id": "media-7", "query": "semaphore synchronization lecture", "category": "lecture", "family": "Semaphores", "split": "dev", "filters": {"modality": "audio"}}
+{"id": "media-8", "query": "lecture explaining paging", "category": "lecture", "family": "Paging", "split": "dev", "filters": {"modality": "audio"}}
+{"id": "media-9", "query": "virtual memory physical frames", "category": "lecture", "family": "Paging", "split": "dev", "filters": {"modality": "audio"}}
+{"id": "media-10", "query": "page table address mapping", "category": "lecture", "family": "Paging", "split": "dev", "filters": {"modality": "audio"}}
+{"id": "media-11", "query": "translation lookaside buffer", "category": "lecture", "family": "Paging", "split": "dev", "filters": {"modality": "audio"}}
+{"id": "media-12", "query": "page fault storage", "category": "lecture", "family": "Paging", "split": "dev", "filters": {"modality": "audio"}}
+{"id": "media-13", "query": "divide memory into pages", "category": "lecture", "family": "Paging", "split": "dev", "filters": {"modality": "audio"}}
+{"id": "media-14", "query": "cached address translations", "category": "lecture", "family": "Paging", "split": "dev", "filters": {"modality": "audio"}}
+{"id": "media-15", "query": "database normalization lecture", "category": "lecture", "family": "Normalization", "split": "dev", "filters": {"modality": "audio"}}
+{"id": "media-16", "query": "remove redundant data", "category": "lecture", "family": "Normalization", "split": "dev", "filters": {"modality": "audio"}}
+{"id": "media-17", "query": "third normal form dependencies", "category": "lecture", "family": "Normalization", "split": "dev", "filters": {"modality": "audio"}}
+{"id": "media-18", "query": "functional dependency attributes", "category": "lecture", "family": "Normalization", "split": "dev", "filters": {"modality": "audio"}}
+{"id": "media-19", "query": "lossless table decomposition", "category": "lecture", "family": "Normalization", "split": "dev", "filters": {"modality": "audio"}}
+{"id": "media-20", "query": "update anomalies in a database", "category": "lecture", "family": "Normalization", "split": "dev", "filters": {"modality": "audio"}}

@@ -1,0 +1,37 @@
+name: correctness
+on: [push, pull_request]
+jobs:
+  backend:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: '3.11'
+      - run: uv sync --project backend --locked --extra dev --extra code --extra ocr --extra media
+      - run: uv run --project backend ruff check backend scripts
+      - run: uv run --project backend ruff format --check backend scripts
+      - run: uv run --project backend mypy --config-file backend/pyproject.toml backend/src/fileora
+      - run: uv run --project backend pytest backend/tests -q
+  frontend:
+    runs-on: ubuntu-latest
+    env:
+      SCARF_ANALYTICS: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+        working-directory: frontend
+      - run: npx prettier --check src e2e '*.ts' '*.json' index.html
+        working-directory: frontend
+      - run: npm run test
+        working-directory: frontend
+      - run: npm run build
+        working-directory: frontend
