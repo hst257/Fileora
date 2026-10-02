@@ -8,6 +8,8 @@ Application code is MIT licensed; these dependencies and weights retain their ow
 - React, Vite, FastAPI, NumPy, Pillow, PyTorch, FAISS, pypdf, PyAV, Tree-sitter, Watchdog, Sentence Transformers, and Transformers: see upstream distributions and bundled license files for exact terms.
 - Tesseract / Tesseract.js and English language data: Apache-2.0. Portable OCR npm packages are installed locally and are not vendored in source control.
 - Phosphor icons: MIT. Fonts use the operating system's installed fonts; no font files are distributed.
+- python-pptx: MIT; lxml: BSD-3-Clause (its libxml2/libxslt components retain their upstream licenses); XlsxWriter: BSD-2-Clause. They provide local PowerPoint package parsing and its supporting XML/chart APIs.
+- LibreOffice: optional, separately installed software; primarily MPL-2.0, with component-specific licenses. Fileora does not bundle it.
 - Swagger UI: Apache-2.0; current npm assets are copied into the local frontend build. Install analytics are disabled with `scarfSettings.enabled=false` and the setup environment.
 - Optional synthetic speech fixture tool: `@echogarden/espeak-ng-emscripten` 0.3.5, GPL-3.0. It is a separate developer fixture generator, not imported or distributed by the application. Its upstream license accompanies the installed npm package.
 

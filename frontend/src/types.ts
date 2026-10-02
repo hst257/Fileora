@@ -1,4 +1,6 @@
 export type Locator = {
+  slide?: number;
+  section?: string;
   page?: number;
   line_start?: number;
   line_end?: number;

@@ -6,7 +6,7 @@ import {
   screen,
   waitFor,
 } from "@testing-library/react";
-import { App, locationLabel } from "./App";
+import { App, extractionNote, locationLabel } from "./App";
 
 afterEach(() => {
   cleanup();
@@ -14,15 +14,37 @@ afterEach(() => {
 });
 
 describe("Source locations", () => {
+  it("explains partial image OCR without suggesting that native slide text failed", () => {
+    expect(
+      extractionNote(
+        "presentation_ocr_partial:12_images_not_processed;native_text_indexed",
+      ),
+    ).toContain("Slide text is searchable");
+    expect(extractionNote("slide_85:IMAGE_UNREADABLE")).toContain("Slide 85");
+    expect(extractionNote("slide_2:OCR_TIMEOUT")).toContain(
+      "Slide text is still searchable",
+    );
+  });
   it("formats pages, lines and timestamps", () => {
     expect(locationLabel({ page: 14 })).toBe("Page 14");
     expect(locationLabel({ line_start: 82, line_end: 89 })).toBe("Lines 82–89");
     expect(locationLabel({ start_ms: 125000 })).toBe("2:05");
+    expect(locationLabel({ slide: 2 })).toBe("Slide 2");
+    expect(locationLabel({ slide: 2, section: "notes" })).toBe(
+      "Slide 2 · Speaker notes",
+    );
+    expect(locationLabel({ slide: 3, section: "image" })).toBe(
+      "Slide 3 · Image text",
+    );
   });
 });
 
 describe("Workspace", () => {
-  function mockService(empty = false, watchFailure = false) {
+  function mockService(
+    empty = false,
+    watchFailure = false,
+    presentation = false,
+  ) {
     let watchEnabled = false;
     const watch = () => ({
       enabled: watchEnabled,
@@ -59,6 +81,25 @@ describe("Workspace", () => {
             }),
           );
         if (url.endsWith("/jobs")) return new Response("[]");
+        if (url.endsWith("/files/1"))
+          return new Response(
+            JSON.stringify({
+              id: 1,
+              name: "lecture.pptx",
+              modality: "presentation",
+              source_available: true,
+              warnings: [],
+              chunks: [
+                {
+                  id: 2,
+                  text: "Unrelated slide image",
+                  kind: "ocr",
+                  asset: "other.jpg",
+                  locator: { slide: 99 },
+                },
+              ],
+            }),
+          );
         if (url.endsWith("/index/watch")) {
           if (watchFailure)
             return new Response(
@@ -86,17 +127,19 @@ describe("Workspace", () => {
                 : [
                     {
                       file_id: 1,
-                      name: "notes.md",
+                      name: presentation ? "lecture.pptx" : "notes.md",
                       relative_path: "notes.md",
                       path: "C:/notes.md",
-                      modality: "text",
+                      modality: presentation ? "presentation" : "text",
                       match_kind: "terms",
-                      extension: ".md",
+                      extension: presentation ? ".pptx" : ".md",
                       evidence: [
                         {
                           chunk_id: 1,
                           snippet: "Critical sections use semaphores.",
-                          locator: { line_start: 1 },
+                          locator: presentation
+                            ? { slide: 2, section: "notes" }
+                            : { line_start: 1 },
                           kind: "text",
                           symbol: "",
                           asset_url: null,
@@ -172,6 +215,46 @@ describe("Workspace", () => {
     fireEvent.click(screen.getByRole("button", { name: /My library/ }));
     expect(screen.getByLabelText("Folder path")).toBeInTheDocument();
     expect(screen.getByText("A home for what you know.")).toBeInTheDocument();
+  });
+
+  it("previews slide evidence and downloads the original without an unrelated slide image", async () => {
+    mockService(false, false, true);
+    render(<App />);
+    fireEvent.change(screen.getByLabelText("Search your files"), {
+      target: { value: "semaphores" },
+    });
+    fireEvent.click(screen.getByLabelText("Run search"));
+    const heading = await screen.findByRole("heading", {
+      name: "lecture.pptx",
+    });
+    fireEvent.click(heading.closest("button")!);
+    await screen.findByRole("link", { name: "Download original" });
+    expect(screen.getAllByText("Slide 2 · Speaker notes")).toHaveLength(2);
+    expect(
+      screen.queryByRole("img", { name: "Preview of lecture.pptx" }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("filters PowerPoint searches by the presentation modality", async () => {
+    mockService(true);
+    render(<App />);
+    fireEvent.change(screen.getByLabelText("Search your files"), {
+      target: { value: "BCNF" },
+    });
+    fireEvent.click(screen.getByLabelText("Run search"));
+    await waitFor(() =>
+      expect(screen.getByText("No matches this time.")).toBeInTheDocument(),
+    );
+    fireEvent.click(screen.getByRole("button", { name: "PPTs" }));
+    await waitFor(() => {
+      const requests = vi
+        .mocked(fetch)
+        .mock.calls.filter(([url]) => String(url).endsWith("/search"));
+      expect(requests).toHaveLength(2);
+      expect(JSON.parse(String(requests[1][1]?.body))).toMatchObject({
+        filters: { modality: "presentation" },
+      });
+    });
   });
 
   it("saves automatic updates through the service and reflects the resulting state", async () => {

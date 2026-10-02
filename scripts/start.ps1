@@ -1,4 +1,5 @@
-param([switch]$Media, [switch]$Watch, [ValidateSet('cpu','auto','cuda')][string]$Device = 'cpu', [int]$Port = 8765)
+param([switch]$Media, [switch]$Watch, [ValidateSet('cpu','auto','cuda')][string]$Device = 'cpu', [int]$Port = 8765,
+      [ValidateRange(0,45)][double]$PptOcrSeconds = 20, [ValidateRange(0,1000)][int]$PptOcrMaxImages = 48)
 $ErrorActionPreference = 'Stop'
 $repo = Split-Path $PSScriptRoot -Parent
 Set-Location -LiteralPath $repo
@@ -7,6 +8,7 @@ if (-not (Test-Path -LiteralPath $cli)) { throw 'Run scripts/setup.ps1 first.' }
 . (Join-Path $PSScriptRoot 'runtime.ps1')
 Assert-FileoraStopped -Repo $repo
 $arguments = @('--data-dir', '.fileora', '--device', $Device, '--ocr', '--vision')
+$arguments += @('--ppt-ocr-seconds', $PptOcrSeconds.ToString([System.Globalization.CultureInfo]::InvariantCulture), '--ppt-ocr-max-images', $PptOcrMaxImages)
 if ($Media) { $arguments += '--media' }
 $arguments += @('serve', '--port', $Port)
 if ($Watch) { $arguments += '--watch' }

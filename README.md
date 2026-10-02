@@ -1,6 +1,6 @@
 # Fileora
 
-**Local Multimodal Personal Search Engine** — find a note, PDF page, code function, screenshot, or lecture moment using the way you remember it.
+**Local Multimodal Personal Search Engine** — find a note, PDF page, PowerPoint slide, code function, screenshot, or lecture moment using the way you remember it.
 
 Fileora runs on your computer with a React workspace and a FastAPI service. SQLite stores the catalog, passages, provenance, and normalized vectors; FAISS provides recoverable exact vector search. There are no paid APIs, accounts, telemetry, or runtime model downloads.
 
@@ -38,6 +38,20 @@ Run setup before startup. If setup reports that `fileora.exe` is being used by a
 | V5: answers (optional Ollama) | Local `qwen3:4b`, bounded retrieved excerpts, evidence IDs, citation validation, explicit unsupported/refusal responses; retrieval works when Ollama is absent |
 
 Every result includes a source path and its supporting passage, page, line range, or time interval. Default hybrid searches with one meaningful term (such as `BCNF`) require a literal text, OCR, filename, or symbol match. Longer queries retain semantic paraphrases while rejecting weak vector neighbors and incidental one-word lexical hits. Results distinguish term matches, meaning-based matches, and visual similarity. Select **Semantic** in Filters to explore related concepts for a single word; **Exact terms** uses literal OR-term retrieval. Scores rank candidates; they are **not confidence probabilities**. Verify the original evidence, especially for generated answers.
+
+## PowerPoint search
+
+Native slide text is extracted before image OCR. Portable OCR reuses one worker per deck, and repeated images reuse content-addressed results; duplicate passages are embedded once while retaining each source location. The default optional image pass allows 20 seconds and 48 unique images per deck, prioritizing large images on slides with little native text. Oversized or unsupported images and exhausted OCR budgets produce file-preview notes; extracted text and speaker notes remain searchable. These limits can miss text that exists only inside an unprocessed image.
+
+For native-text-only PowerPoint indexing, launch with `scripts/start.ps1 -PptOcrSeconds 0`. To spend more time on image text, use `-PptOcrSeconds 40 -PptOcrMaxImages 200` (within the overall extraction timeout). CLI equivalents are `--ppt-ocr-seconds` and `--ppt-ocr-max-images`; keep settings consistent between indexing and serving. Restart and rescan after upgrading: the presentation-specific pipeline identity refreshes old decks while preserving unchanged text/PDF/code revisions. Disabled audio/video processing counts as skipped and no longer creates `MEDIA_DISABLED` scan failures.
+
+The worker-reuse approach follows [Tesseract.js performance guidance](https://github.com/naptha/tesseract.js/blob/master/docs/performance.md). Native extraction remains python-pptx; changing the XML parser would not fix the measured repeated-OCR bottleneck. Validation details are in [PowerPoint performance](docs/powerpoint-performance.md).
+
+Add the folder containing your presentations and **Rescan**. `.pptx` files support keyword and semantic search over slide text, grouped text, tables, chart labels, and speaker notes. Results show the slide number and distinguish speaker notes from slide content. The **PPTs** filter restricts results to presentations; **Download original** retrieves the unchanged source file. Embedded raster images use the existing optional OCR engine for searchable text and thumbnails. Slides are not rendered for visual similarity search.
+
+Older binary `.ppt` files require local LibreOffice for automatic conversion. Fileora detects `soffice` on PATH or the usual Windows installation; `FILEORA_LIBREOFFICE_CMD` can specify its absolute executable path. Without it, scan details show `LEGACY_PPT_UNAVAILABLE` and recommend saving the file as `.pptx` in PowerPoint. Conversion uses a temporary private profile with macros, active content, and untrusted external links disabled. LibreOffice is optional and is not bundled or installed by Fileora.
+
+After updating an existing checkout, stop Fileora before running setup with `-NoModels` to install the new parser and rebuild the UI, then restart and rescan. Existing model downloads are reusable. `.pptx` extraction, search, provenance, and download are tested with generated fixtures; legacy converter behavior has contract tests, but live LibreOffice conversion has not been validated here. See [PowerPoint limits](docs/roadmap.md).
 
 ## CLI
 

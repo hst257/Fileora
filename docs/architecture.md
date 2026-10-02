@@ -30,6 +30,8 @@ A chunk has a kind, content hash, ordinal, text, symbol, optional preview asset,
 
 ## Revision publication and recovery
 
+PowerPoint `.pptx` extraction uses python-pptx and produces separate slide-body, speaker-note, and OCR units with `slide` and `section` locators. Chunking never crosses these units. Grouped text, table cells, and chart titles/series/categories join the slide body; notes use only the body placeholder. Original presentations are served as Office MIME attachments. ZIP expansion, individual parts, slide count, nesting depth, and decoded images are bounded. Legacy `.ppt` conversion optionally uses headless local LibreOffice with an isolated profile and disabled macros/active content/untrusted links; temporary outputs are discarded and the original source identity is preserved.
+
 1. Walk only allowlisted roots; skip links/reparse points and excluded paths. Capture stat data.
 2. Skip unchanged `(size,mtime,pipeline)` entries; watcher events or full verification force SHA-256. Missing roots are marked unavailable and preserved. An incomplete walk never infers deletion.
 3. Mark a changing file stale so its earlier revision cannot be returned as current.
@@ -60,6 +62,10 @@ Observer schedule/start failures, unavailable roots, and stopped emitter threads
 - Hydrate full text only for candidate passages. Never report ranking scores as calibrated relevance confidence. No universal abstention threshold is claimed.
 
 ## OCR, video, and answers
+
+PowerPoint extraction first collects native slide text and notes, then processes an optional image queue. One portable Node/Tesseract worker recognizes multiple images over a local JSON-lines pipe. Duplicate image blobs reuse OCR while retaining separate slide locators. A 20-second/48-unique-image default budget and 1,600-pixel longest-edge limit bound the optional work; large images on slides without substantial native text take priority. Per-image errors become warnings, and partial OCR never discards native text. Source size, ZIP, and hard extraction timeout checks still apply.
+
+PowerPoint OCR cache keys include blob hashes and engine identity. Cache files publish atomically under `ocr-cache/ppt-*.json`, and OCR locators retain a cache key. Scan/forget cleanup removes entries that no active OCR passage references, including temporary cache writes. A presentation-specific pipeline version and OCR settings refresh affected decks without invalidating other formats. Missing text embeddings are computed once per distinct passage hash in each file, while every source span keeps its own catalog/vector row.
 
 Native Tesseract is used if installed; otherwise the Node/WebAssembly Tesseract fallback uses packaged English data and local engine paths. Neither path needs online OCR. Scanned PDF pages render through PDFium only when extracted text is empty. Image previews use EXIF-corrected thumbnails. Video sampling defaults to one frame every 10 seconds, suppresses near-identical average hashes, and caps frame counts. It cannot guarantee finding content between sampled frames.
 

@@ -66,7 +66,9 @@ def strong_candidates(branch: list[tuple[int, float]], minimum: float) -> list[t
 
 class Filters(BaseModel):
     root_id: int | None = None
-    modality: Literal["text", "document", "code", "image", "audio", "video"] | None = None
+    modality: (
+        Literal["text", "document", "presentation", "code", "image", "audio", "video"] | None
+    ) = None
     extension: str | None = None
     path_prefix: str | None = Field(default=None, max_length=512)
     modified_after: datetime | None = None

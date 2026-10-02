@@ -552,7 +552,8 @@ h1 {
   border-radius: 5px;
   color: #6c715b;
 }
-.file-icon.document {
+.file-icon.document,
+.file-icon.presentation {
   color: #9f5145;
   background: #f5eae5;
 }

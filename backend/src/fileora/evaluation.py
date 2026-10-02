@@ -215,6 +215,10 @@ def run_evaluation(
 
 
 def span_matches(actual: dict, expected: dict) -> bool:
+    if "slide" in expected and actual.get("slide") != expected["slide"]:
+        return False
+    if "section" in expected and actual.get("section") != expected["section"]:
+        return False
     if "page" in expected and actual.get("page") != expected["page"]:
         return False
     for start, end in (

@@ -7,6 +7,7 @@ import {
   Clock,
   FileCode,
   FilePdf,
+  FilePpt,
   FileText,
   Folder,
   FolderOpen,
@@ -64,12 +65,27 @@ function HighlightedText({ text, query }: { text: string; query: string }) {
 }
 
 export function locationLabel(locator: Locator): string {
+  if (locator.slide)
+    return `Slide ${locator.slide}${locator.section === "notes" ? " · Speaker notes" : locator.section === "image" ? " · Image text" : ""}`;
   if (locator.page) return `Page ${locator.page}`;
   if (locator.line_start)
     return `Lines ${locator.line_start}${locator.line_end && locator.line_end !== locator.line_start ? "–" + locator.line_end : ""}`;
   if (locator.start_ms !== undefined)
     return `${Math.floor(locator.start_ms / 60000)}:${String(Math.floor(locator.start_ms / 1000) % 60).padStart(2, "0")}`;
   return "Image";
+}
+
+export function extractionNote(warning: string): string {
+  const partial = warning.match(/^presentation_ocr_partial:(\d+)_/);
+  if (partial)
+    return `Slide text is searchable. Image OCR stopped early; ${partial[1]} image placements were not processed.`;
+  const unreadable = warning.match(/^slide_(\d+):IMAGE_UNREADABLE$/);
+  if (unreadable)
+    return `An embedded image on Slide ${unreadable[1]} could not be read. Slide text is still searchable.`;
+  const timeout = warning.match(/^slide_(\d+):OCR_TIMEOUT$/);
+  if (timeout)
+    return `Image OCR on Slide ${timeout[1]} reached its time limit. Slide text is still searchable.`;
+  return warning.replaceAll("_", " ");
 }
 
 function FileIcon({
@@ -82,15 +98,17 @@ function FileIcon({
   const Icon =
     modality === "document"
       ? FilePdf
-      : modality === "code"
-        ? FileCode
-        : modality === "image"
-          ? Image
-          : modality === "audio"
-            ? Waveform
-            : modality === "video"
-              ? VideoCamera
-              : FileText;
+      : modality === "presentation"
+        ? FilePpt
+        : modality === "code"
+          ? FileCode
+          : modality === "image"
+            ? Image
+            : modality === "audio"
+              ? Waveform
+              : modality === "video"
+                ? VideoCamera
+                : FileText;
   return <Icon size={size} weight="duotone" />;
 }
 
@@ -313,7 +331,8 @@ export function App() {
 
   const asset =
     selected?.evidence.find((e) => e.asset_url)?.asset_url ||
-    (detail?.chunks.find((c) => c.asset)
+    (selected?.modality !== "presentation" &&
+    detail?.chunks.find((c) => c.asset)
       ? `/api/v1/assets/${detail.chunks.find((c) => c.asset)!.id}`
       : undefined);
   const loc = selected?.evidence[0]?.locator;
@@ -502,6 +521,7 @@ export function App() {
                 {[
                   ["", "All files"],
                   ["document", "PDFs"],
+                  ["presentation", "PPTs"],
                   ["code", "Code"],
                   ["image", "Images"],
                   ["audio", "Audio"],
@@ -785,7 +805,7 @@ export function App() {
                           <div className="preview-excerpts">
                             {selected.warnings.map((warning) => (
                               <p className="small muted" key={warning}>
-                                Extraction note: {warning.replaceAll("_", " ")}
+                                Extraction note: {extractionNote(warning)}
                               </p>
                             ))}
                             {selected.evidence
@@ -812,7 +832,10 @@ export function App() {
                               target="_blank"
                               rel="noreferrer"
                             >
-                              Open original <ArrowSquareOut size={17} />
+                              {selected.modality === "presentation"
+                                ? "Download original"
+                                : "Open original"}{" "}
+                              <ArrowSquareOut size={17} />
                             </a>
                           )}
                         </>
@@ -1084,7 +1107,7 @@ export function App() {
                           : `Library scan ${job.state}`}
                       </strong>
                       <span>
-                        {job.indexed} indexed · {job.skipped} unchanged ·{" "}
+                        {job.indexed} indexed · {job.skipped} skipped ·{" "}
                         {job.deleted} removed · {job.failed} failed
                       </span>
                     </button>
@@ -1121,6 +1144,12 @@ export function App() {
                       <X size={18} />
                     </button>
                   </div>
+                  {!health?.media_enabled && (
+                    <p>
+                      Audio and video files are skipped because transcription is
+                      off.
+                    </p>
+                  )}
                   {jobDetail.errors?.length ? (
                     jobDetail.errors.map((item, index) => (
                       <p key={index}>

@@ -5,7 +5,9 @@ import json
 import multiprocessing as mp
 import os
 import shutil
+import signal
 import subprocess
+import sys
 import tempfile
 import time
 from pathlib import Path
@@ -14,6 +16,7 @@ from fileora.config import (
     AUDIO_EXTENSIONS,
     CODE_EXTENSIONS,
     IMAGE_EXTENSIONS,
+    PRESENTATION_EXTENSIONS,
     VIDEO_EXTENSIONS,
     Settings,
 )
@@ -128,16 +131,18 @@ def code_units(path: Path, text: str) -> list[Unit]:
         ]
 
 
-def ocr_image(image, locator: dict, settings: Settings) -> Unit | None:
+def ocr_image(image, locator: dict, settings: Settings, timeout: float = 30) -> Unit | None:
     if not shutil.which("tesseract") and not os.getenv("FILEORA_TESSERACT_CMD"):
-        return portable_ocr(image, locator, settings)
+        return portable_ocr(image, locator, settings, timeout=timeout)
     try:
         import pytesseract
 
         if os.getenv("FILEORA_TESSERACT_CMD"):
             pytesseract.pytesseract.tesseract_cmd = os.environ["FILEORA_TESSERACT_CMD"]
 
-        data = pytesseract.image_to_data(image, output_type=pytesseract.Output.DICT, timeout=30)
+        data = pytesseract.image_to_data(
+            image, output_type=pytesseract.Output.DICT, timeout=timeout
+        )
     except ImportError as exc:
         raise FileoraError("OCR_UNAVAILABLE", "Install backend[ocr] and Tesseract") from exc
     except Exception as exc:
@@ -160,7 +165,7 @@ def ocr_image(image, locator: dict, settings: Settings) -> Unit | None:
     return Unit(" ".join(words), "ocr", {**locator, "boxes": boxes}) if words else None
 
 
-def portable_ocr(image, locator: dict, settings: Settings) -> Unit | None:
+def portable_ocr(image, locator: dict, settings: Settings, timeout: float = 45) -> Unit | None:
     """Offline WebAssembly Tesseract fallback; no system installer required."""
     script = Path(__file__).resolve().parents[3] / "scripts" / "ocr" / "recognize.cjs"
     node = shutil.which("node")
@@ -182,7 +187,7 @@ def portable_ocr(image, locator: dict, settings: Settings) -> Unit | None:
             capture_output=True,
             text=True,
             encoding="utf-8",
-            timeout=45,
+            timeout=timeout,
             env={**os.environ, "FILEORA_OCR_CACHE": str(cache)},
         )
         if output.returncode:
@@ -212,6 +217,10 @@ def thumbnail(image, settings: Settings, key: str) -> str:
 
 def extract(path: Path, settings: Settings) -> Extraction:
     ext = path.suffix.lower()
+    if ext in PRESENTATION_EXTENSIONS:
+        from fileora.presentations import extract_presentation
+
+        return extract_presentation(path, settings)
     if ext == ".pdf":
         from pypdf import PdfReader
 
@@ -387,6 +396,8 @@ def media(path: Path, settings: Settings) -> Extraction:
 
 def _child(connection, path: Path, settings: Settings) -> None:
     try:
+        if sys.platform != "win32":
+            os.setsid()  # Keep OCR/converter subprocesses in this extraction's group.
         connection.send((True, extract(path, settings)))
     except Exception as exc:
         connection.send(
@@ -432,6 +443,11 @@ def supervised_extract(path: Path, settings: Settings, cancelled=None) -> Extrac
         ) from exc
     finally:
         parent.close()
+        if sys.platform != "win32" and process.pid is not None:
+            try:
+                os.killpg(process.pid, signal.SIGKILL)
+            except ProcessLookupError:
+                pass
         if process.is_alive():
             if os.name == "nt":
                 # Include portable OCR's Node child when terminating the extractor.
@@ -443,3 +459,8 @@ def supervised_extract(path: Path, settings: Settings, cancelled=None) -> Extrac
                 )
             process.terminate()
         process.join(timeout=5)
+        if path.suffix.lower() == ".ppt" and not process.is_alive():
+            # A forcibly stopped extractor cannot run TemporaryDirectory's cleanup.
+            for folder in settings.data_dir.glob(f"ppt-convert-{process.pid}-*"):
+                if folder.is_dir() and not folder.is_symlink():
+                    shutil.rmtree(folder, ignore_errors=True)

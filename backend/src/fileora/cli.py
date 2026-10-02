@@ -33,6 +33,18 @@ def parser() -> argparse.ArgumentParser:
     )
     result.add_argument("--chunk-tokens", type=int, default=192)
     result.add_argument("--overlap-tokens", type=int, default=32)
+    result.add_argument(
+        "--ppt-ocr-seconds",
+        type=float,
+        default=20,
+        help="Optional slide-image OCR budget per presentation (0–45 seconds)",
+    )
+    result.add_argument(
+        "--ppt-ocr-max-images",
+        type=int,
+        default=48,
+        help="Maximum unique slide images to OCR per presentation",
+    )
     sub = result.add_subparsers(dest="command", required=True)
     roots = sub.add_parser("roots")
     roots_sub = roots.add_subparsers(dest="action", required=True)
@@ -85,6 +97,8 @@ def main() -> None:
         "enable_media": args.media,
         "chunk_tokens": args.chunk_tokens,
         "overlap_tokens": args.overlap_tokens,
+        "ppt_ocr_seconds": args.ppt_ocr_seconds,
+        "ppt_ocr_max_images": args.ppt_ocr_max_images,
     }
     if args.data_dir:
         settings_kwargs["data_dir"] = args.data_dir

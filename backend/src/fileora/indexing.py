@@ -20,6 +20,7 @@ from fileora.config import (
     CODE_EXTENSIONS,
     EXCLUDED,
     IMAGE_EXTENSIONS,
+    PRESENTATION_EXTENSIONS,
     TEXT_EXTENSIONS,
     VIDEO_EXTENSIONS,
     VISION_MODEL,
@@ -36,6 +37,7 @@ SUPPORTED = (
     | IMAGE_EXTENSIONS
     | AUDIO_EXTENSIONS
     | VIDEO_EXTENSIONS
+    | PRESENTATION_EXTENSIONS
     | {".pdf"}
 )
 
@@ -246,6 +248,16 @@ class Indexer:
                 temporary.unlink(missing_ok=True)
             except OSError:
                 pass
+        cache_keys = {
+            json.loads(r["locator"]).get("ocr_cache_key")
+            for r in self.store.rows("SELECT locator FROM chunks WHERE kind='ocr'")
+        }
+        for cached in (self.settings.data_dir / "ocr-cache").glob("ppt-*.*"):
+            if cached.suffix == ".tmp" or cached.stem not in cache_keys:
+                try:
+                    cached.unlink(missing_ok=True)
+                except OSError:
+                    pass
 
     def create_job(self, verify: bool = False) -> str:
         job_id = uuid.uuid4().hex
@@ -270,7 +282,7 @@ class Indexer:
             (job_id, file_id, relative, code, message),
         )
 
-    def pipeline_hash(self) -> str:
+    def pipeline_hash(self, path: Path | None = None) -> str:
         identity: dict = {
             "extractor": 1,
             "chunker": 1,
@@ -281,6 +293,15 @@ class Indexer:
             "media": self.settings.enable_media,
             "frames": self.settings.frame_interval,
         }
+        if path and path.suffix.lower() in PRESENTATION_EXTENSIONS:
+            from fileora.presentation_ocr import engine_identity
+
+            identity["presentation"] = {
+                "version": 2,
+                "ocr_seconds": self.settings.ppt_ocr_seconds,
+                "ocr_max_images": self.settings.ppt_ocr_max_images,
+                "ocr_engine": engine_identity() if self.settings.enable_ocr else "disabled",
+            }
         for kind, model in (
             ("text", self.settings.text_model),
             ("vision", "openai/clip-vit-base-patch32"),
@@ -330,7 +351,13 @@ class Indexer:
             "SELECT f.*,v.sha256,v.pipeline_hash FROM files f LEFT JOIN file_revisions v ON v.id=f.active_revision_id WHERE path_key=?",
             (key,),
         )
-        pipeline = self.pipeline_hash()
+        # Optional media is intentionally skipped, not reported as a parser failure.
+        if (
+            path.suffix.lower() in AUDIO_EXTENSIONS | VIDEO_EXTENSIONS
+            and not self.settings.enable_media
+        ):
+            return "skipped"
+        pipeline = self.pipeline_hash(path)
         unchanged = (
             current and current["status"] == "ready" and current["pipeline_hash"] == pipeline
         )
@@ -391,8 +418,11 @@ class Indexer:
                 else:
                     missing.append((i, unit, input_hash))
             if missing:
-                vectors = self.models.encode_text([u.text for _, u, _ in missing])
-                for (i, _, input_hash), vector in zip(missing, vectors, strict=True):
+                unique = {input_hash: unit.text for _, unit, input_hash in missing}
+                vectors = self.models.encode_text(list(unique.values()))
+                by_hash = dict(zip(unique, vectors, strict=True))
+                for i, _, input_hash in missing:
+                    vector = by_hash[input_hash]
                     embeddings.setdefault(i, []).append((profile, vector, input_hash))
         elif text_units:
             warnings.append("semantic_not_indexed:model_not_prepared")

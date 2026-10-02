@@ -12,6 +12,10 @@ The API validates loopback Host, exact Origin, cross-site fetch metadata, and a 
 
 ## What is stored
 
+PowerPoint image OCR is cached locally in `ocr-cache/ppt-*.json` with extracted words, boxes, and a thumbnail identity. These files contain source-derived text and have the same privacy implications as catalog passages. Normal scan/forget cleanup removes unreferenced PowerPoint cache entries and unfinished cache writes; abrupt process/system crashes can leave temporary files until subsequent cleanup. Reused OCR workers stay local and terminate when their presentation finishes.
+
+PowerPoint text and speaker notes are indexed like other passages; embedded-image OCR may create thumbnails. Original presentations are downloaded as attachments rather than executed or embedded in the browser. Optional legacy `.ppt` conversion creates a temporary local copy and private LibreOffice profile under the runtime directory. Normal completion and supervised cancellation remove these temporary files; an abrupt whole-system/process crash may leave temporary copies until the runtime is cleaned. Fileora never launches slide macros, follows presentation hyperlinks, or edits the original presentation.
+
 `.fileora/catalog.sqlite3` contains absolute folder/file paths, extracted passages and OCR/transcripts, locators, embeddings, and job errors. FAISS files contain vectors, assets contain thumbnails/frames, and models contain downloaded weights. Original files are never edited. Model downloads and package-manager setup use the network and reveal the requested package/model to their hosting services.
 
 The catalog is not encrypted. Use the operating system's account protections and disk encryption for sensitive libraries. Exclusions are not a content classifier. Delete/forget removes logical catalog rows and generated assets/snapshots; SQLite WAL/free pages and operating-system backups can retain previous bytes. Secure erasure of storage is not promised. To fully reset, stop Fileora and remove its explicitly chosen runtime directory using your operating system's tools; verify the path before deleting anything.

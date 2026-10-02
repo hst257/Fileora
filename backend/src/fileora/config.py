@@ -26,6 +26,7 @@ CODE_EXTENSIONS = {
 IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg"}
 AUDIO_EXTENSIONS = {".wav", ".mp3", ".flac"}
 VIDEO_EXTENSIONS = {".mp4", ".mkv"}
+PRESENTATION_EXTENSIONS = {".pptx", ".ppt"}
 EXCLUDED = {
     ".git",
     ".venv",
@@ -62,6 +63,8 @@ class Settings:
     overlap_tokens: int = 32
     max_file_bytes: int = 50 * 1024 * 1024
     extraction_timeout: float = 60
+    ppt_ocr_seconds: float = 20
+    ppt_ocr_max_images: int = 48
     max_image_pixels: int = 40_000_000
     max_media_seconds: int = 4 * 60 * 60
     frame_interval: int = 10
@@ -88,6 +91,8 @@ class Settings:
             raise ValueError("Device must be auto, cpu, or cuda")
         if self.frame_interval < 1:
             raise ValueError("Frame interval must be positive")
+        if not 0 <= self.ppt_ocr_seconds <= 45 or not 0 <= self.ppt_ocr_max_images <= 1000:
+            raise ValueError("PowerPoint OCR needs 0–45 seconds and 0–1000 unique images")
         if not all(
             0 <= value <= 1 for value in (self.text_similarity_floor, self.min_vision_similarity)
         ):

@@ -9,7 +9,13 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from fileora.assistant import answer
-from fileora.config import AUDIO_EXTENSIONS, IMAGE_EXTENSIONS, VIDEO_EXTENSIONS, Settings
+from fileora.config import (
+    AUDIO_EXTENSIONS,
+    IMAGE_EXTENSIONS,
+    PRESENTATION_EXTENSIONS,
+    VIDEO_EXTENSIONS,
+    Settings,
+)
 from fileora.domain import FileoraError
 from fileora.retrieval import SearchRequest
 from fileora.service import Service
@@ -237,6 +243,13 @@ def create_app(settings: Settings | None = None, service: Service | None = None)
         path, _ = service.source(file_id)
         if path.suffix.lower() == ".pdf":
             return FileResponse(path, media_type="application/pdf")
+        if path.suffix.lower() in PRESENTATION_EXTENSIONS:
+            content_type = (
+                "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+                if path.suffix.lower() == ".pptx"
+                else "application/vnd.ms-powerpoint"
+            )
+            return FileResponse(path, media_type=content_type, filename=path.name)
         if path.suffix.lower() in IMAGE_EXTENSIONS | AUDIO_EXTENSIONS | VIDEO_EXTENSIONS:
             return FileResponse(path)
         from fileora.extraction import text_file
