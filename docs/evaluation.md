@@ -29,7 +29,7 @@ CLIP is disabled in this comparison to isolate text retrieval. OCR text remains 
 
 The default remains MiniLM hybrid. BGE provides no hybrid benefit on this small fixture. Reranking improves the first result but costs about eight times the measured p95; it is opt-in. These choices require rechecking on a representative corpus rather than extrapolating the fixture result.
 
-**Original no-match false positives: BM25 3/10; semantic and hybrid 10/10.** These saved baseline reports predate the keyword/weak-neighbor fix. Rank scores are not confidence, and structural citation checks do not solve answerability.
+**Original no-match false positives: BM25 3/10; semantic and hybrid 10/10.** These saved baseline reports predate the keyword/weak-neighbor fix. Rank scores are not confidence, and a source location alone does not establish relevance.
 
 ## Current relevance filtering
 

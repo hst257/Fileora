@@ -119,15 +119,3 @@ export type SearchResponse = {
   mode: string;
   warnings: string[];
 };
-export type AnswerResponse = {
-  answer: string;
-  citations: (Evidence & {
-    id: string;
-    file_id: number;
-    name: string;
-    relative_path: string;
-  })[];
-  supported: boolean | null;
-  notice?: string;
-  retrieval: SearchResponse;
-};

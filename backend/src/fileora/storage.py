@@ -51,6 +51,7 @@ CREATE TABLE IF NOT EXISTS job_errors(
 CREATE VIRTUAL TABLE IF NOT EXISTS chunks_fts USING fts5(text,name,path,symbol, tokenize='unicode61');
 CREATE INDEX IF NOT EXISTS file_root_status ON files(root_id,status);
 CREATE INDEX IF NOT EXISTS chunk_revision ON chunks(revision_id);
+CREATE INDEX IF NOT EXISTS revision_content ON file_revisions(sha256,pipeline_hash);
 CREATE TABLE IF NOT EXISTS app_meta(key TEXT PRIMARY KEY,value TEXT NOT NULL);
 INSERT OR IGNORE INTO app_meta VALUES('generation','0');
 """

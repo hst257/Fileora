@@ -17,7 +17,6 @@ flowchart LR
   Q --> DB
   Q --> IX[FAISS exact snapshots]
   Q --> M
-  API --> O[Optional loopback Ollama]
 ```
 
 The service composes straightforward modules instead of introducing an ORM, message broker, external vector database, or an agent framework. The API and CLI share indexing/retrieval code. There is one worker and one process owner per catalog. A process lock prevents CLI/server overlap; a reentrant lock serializes search and publication of a revision. Expensive extraction/embedding runs before publication so search can continue between atomic changes.
@@ -61,7 +60,7 @@ Observer schedule/start failures, unavailable roots, and stopped emitter threads
 - Collapse by file, retain up to three distinct supporting excerpts, then collapse exact SHA-256 duplicates with eligible aliases. Raw similarities across model spaces are never compared directly.
 - Hydrate full text only for candidate passages. Never report ranking scores as calibrated relevance confidence. No universal abstention threshold is claimed.
 
-## OCR, video, and answers
+## OCR and video
 
 V3 OCR units for screenshots, scanned PDF pages, and embedded PowerPoint images retain their own preview asset and recognition dimensions. The frontend uses those dimensions as an SVG coordinate system over the rendered thumbnail, filters boxes by exact query words, clamps invalid bounds, and provides a hide/show control. Visual-only evidence can use OCR from the same asset when available; boxes from unrelated slides/pages are not substituted. Missing old dimensions suppress overlays until rescan. Capability health checks inspect local OCR tooling and the CLIP manifest without launching inference.
 
@@ -71,7 +70,7 @@ PowerPoint OCR cache keys include blob hashes and engine identity. Cache files p
 
 Native Tesseract is used if installed; otherwise the Node/WebAssembly Tesseract fallback uses packaged English data and local engine paths. Neither path needs online OCR. Scanned PDF pages render through PDFium only when extracted text is empty. Image previews use EXIF-corrected thumbnails. Video sampling defaults to one frame every 10 seconds, suppresses near-identical average hashes, and caps frame counts. It cannot guarantee finding content between sampled frames.
 
-Whisper uses the prepared English base model with local CTranslate2/PyAV decoding. Native HTML media controls seek to the supporting interval. Qwen through optional Ollama receives only bounded textual excerpts and evidence IDs; GPU embedding models are unloaded before generation. Citation checking detects missing or nonexistent IDs, not semantic entailment. Search remains usable when generation fails.
+Whisper uses the prepared English base model with local CTranslate2/PyAV decoding. Native HTML media controls seek to the supporting interval.
 
 ## Why these technologies
 
@@ -86,3 +85,13 @@ Whisper uses the prepared English base model with local CTranslate2/PyAV decodin
 | React + FastAPI | Accessible browser UI, typed contracts, inspectable Python modules | Desktop packaging/signing is deferred |
 
 The default Python requirement is 3.11–3.13 because 3.11 was installed and successfully validated; the initial plan's 3.12-only assumption would unnecessarily block this machine.
+
+## Final V4 scan optimization
+
+Each scan snapshots catalog metadata once per root and model/pipeline identities once per file type. Progress counters flush in bounded batches and before extraction/terminal state; cancellation is polled every 64 directory entries or 100 ms while traversing and every 200 ms during supervised extraction. Revisions retain their original per-file transactions.
+
+Compatibility checks enumerate historical hashes only for settings that cannot affect that format (for example media flags on Markdown). Actual OCR budgets, extractor versions, token budgets, source bytes, and relevant model identities still invalidate affected work. Images/videos carry an explicit visual-enabled field; older identities can supply extraction while missing CLIP vectors are computed.
+
+After hashing a new/changed file, a ready same-extension revision with identical SHA-256 and compatible extraction settings can provide already-chunked units, warnings, and existing thumbnails. Units are not chunked a second time. Missing assets force normal extraction. Each copy retains its own file/revision/evidence IDs, and source stat plus SHA-256 is rechecked before publication. Text and visual vector-cache lookups use bounded SQL batches and exact immutable profile identities.
+
+Video-frame and scanned-PDF portable OCR share one file-scoped worker, isolated with a context variable and closed in a finally block. No long-lived extractor, reduced frame sampling, lower OCR resolution, or relaxed SQLite durability is introduced. V5 UI/API/model-generation configuration is excluded from the final release.

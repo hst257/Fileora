@@ -11,7 +11,9 @@ import subprocess
 import sys
 import tempfile
 import time
+from contextvars import ContextVar
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from fileora.config import (
     AUDIO_EXTENSIONS,
@@ -22,6 +24,13 @@ from fileora.config import (
     Settings,
 )
 from fileora.domain import Extraction, FileoraError, Unit
+
+if TYPE_CHECKING:
+    from fileora.presentation_ocr import PresentationOCR
+
+_portable_session: ContextVar[PresentationOCR | None] = ContextVar(
+    "portable_ocr_session", default=None
+)
 
 
 def text_file(path: Path) -> str:
@@ -168,6 +177,10 @@ def ocr_image(image, locator: dict, settings: Settings, timeout: float = 30) -> 
 
 def portable_ocr(image, locator: dict, settings: Settings, timeout: float = 45) -> Unit | None:
     """Offline WebAssembly Tesseract fallback; no system installer required."""
+    worker = _portable_session.get()
+    if worker is not None:
+        unit = worker._portable(image, timeout)
+        return Unit(unit.text, "ocr", {**locator, **unit.locator}) if unit else None
     script = Path(__file__).resolve().parents[3] / "scripts" / "ocr" / "recognize.cjs"
     node = shutil.which("node")
     if not node or not (script.parent / "node_modules" / "@tesseract.js-data" / "eng").is_dir():
@@ -241,6 +254,20 @@ def media_capability() -> dict:
 
 
 def extract(path: Path, settings: Settings) -> Extraction:
+    if settings.enable_ocr and path.suffix.lower() in VIDEO_EXTENSIONS | {".pdf"}:
+        from fileora.presentation_ocr import PresentationOCR
+
+        worker = PresentationOCR(settings)
+        token = _portable_session.set(worker)
+        try:
+            return _extract(path, settings)
+        finally:
+            _portable_session.reset(token)
+            worker.close()
+    return _extract(path, settings)
+
+
+def _extract(path: Path, settings: Settings) -> Extraction:
     ext = path.suffix.lower()
     if ext in PRESENTATION_EXTENSIONS:
         from fileora.presentations import extract_presentation

@@ -3,10 +3,12 @@ from __future__ import annotations
 import fnmatch
 import hashlib
 import heapq
+import itertools
 import json
 import os
 import re
 import threading
+import time
 import uuid
 from collections.abc import Callable
 from pathlib import Path
@@ -26,7 +28,7 @@ from fileora.config import (
     VISION_MODEL,
     Settings,
 )
-from fileora.domain import FileoraError
+from fileora.domain import FileoraError, Unit
 from fileora.extraction import supervised_extract
 from fileora.models import Models
 from fileora.storage import Store, json_dump
@@ -178,6 +180,11 @@ class Indexer:
         self.store, self.settings, self.models, self.lock = store, settings, models, lock
         self.extractor = extractor
         self.on_forget: Callable[[], None] | None = None
+        self._scan_records: dict[str, dict] | None = None
+        self._pipeline_base: dict | None = None
+        self._compatible_cache: dict[str, set[str]] | None = None
+        self._hash_cache: dict[str, str] | None = None
+        self._before_extract: Callable[[], None] | None = None
 
     def add_root(self, path: str, exclusions: list[str] | None = None) -> dict:
         folder = Path(path).expanduser()
@@ -283,7 +290,7 @@ class Indexer:
             (job_id, file_id, relative, code, message),
         )
 
-    def pipeline_hash(self, path: Path | None = None) -> str:
+    def _pipeline_identity(self, path: Path | None = None) -> dict:
         identity: dict = {
             "extractor": 1,
             "chunker": 1,
@@ -294,12 +301,32 @@ class Indexer:
             "media": self.settings.enable_media,
             "frames": self.settings.frame_interval,
         }
+        if self._pipeline_base is not None:
+            identity = dict(self._pipeline_base)
+        else:
+            for kind, model in (("text", self.settings.text_model), ("vision", VISION_MODEL)):
+                identity[kind] = (
+                    self.models.manifest(model) if self.models.available(model) else "not-prepared"
+                )
+            if self.settings.enable_media:
+                speech = "Systran/faster-whisper-base.en"
+                identity["speech"] = (
+                    self.models.manifest(speech)
+                    if self.models.available(speech)
+                    else "not-prepared"
+                )
+            if self._compatible_cache is not None:
+                self._pipeline_base = dict(identity)
+        # Existing revision hashes use insertion-ordered JSON. Keep model metadata
+        # after format-specific fields so old, valid extractions remain reusable.
+        text = identity.pop("text")
+        speech = identity.pop("speech", None)
         if path and path.suffix.lower() in PRESENTATION_EXTENSIONS:
             from fileora.presentation_ocr import engine_identity
 
             identity["presentation"] = {
                 "version": 2,
-                "ocr_seconds": self.settings.ppt_ocr_seconds,
+                "ocr_seconds": float(self.settings.ppt_ocr_seconds),
                 "ocr_max_images": self.settings.ppt_ocr_max_images,
                 "ocr_engine": engine_identity() if self.settings.enable_ocr else "disabled",
             }
@@ -307,19 +334,86 @@ class Indexer:
             identity["image_provenance"] = 1
         if path and path.suffix.lower() in AUDIO_EXTENSIONS | VIDEO_EXTENSIONS:
             identity["media_provenance"] = 2
-        for kind, model in (
-            ("text", self.settings.text_model),
-            ("vision", "openai/clip-vit-base-patch32"),
-        ):
-            identity[kind] = (
-                self.models.manifest(model) if self.models.available(model) else "not-prepared"
-            )
+        identity["text"] = text
         if self.settings.enable_media:
-            speech = "Systran/faster-whisper-base.en"
-            identity["speech"] = (
-                self.models.manifest(speech) if self.models.available(speech) else "not-prepared"
-            )
-        return hashlib.sha256(json_dump(identity).encode()).hexdigest()
+            identity["speech"] = speech
+        if path and path.suffix.lower() in IMAGE_EXTENSIONS | VIDEO_EXTENSIONS:
+            identity["visual_enabled"] = self.settings.enable_vision
+        return identity
+
+    def pipeline_hash(self, path: Path | None = None) -> str:
+        key = path.suffix.lower() if path else ""
+        if self._hash_cache is not None and key in self._hash_cache:
+            return self._hash_cache[key]
+        identity = self._pipeline_identity(path)
+        result = hashlib.sha256(json_dump(identity).encode()).hexdigest()
+        if self._hash_cache is not None:
+            self._hash_cache[key] = result
+        return result
+
+    def compatible_pipelines(self, path: Path, for_extraction: bool = False) -> set[str]:
+        ext = path.suffix.lower()
+        cache_key = ext + (":extraction" if for_extraction else "")
+        if self._compatible_cache is not None and cache_key in self._compatible_cache:
+            return self._compatible_cache[cache_key]
+        identity = self._pipeline_identity(path)
+        irrelevant: tuple[str, ...] = (
+            ("ocr", "media")
+            if ext in TEXT_EXTENSIONS | CODE_EXTENSIONS
+            else ("media",)
+            if ext in PRESENTATION_EXTENSIONS | {".pdf"}
+            else ("media",)
+            if ext in IMAGE_EXTENSIONS
+            else ("ocr",)
+            if ext in AUDIO_EXTENSIONS
+            else ()
+        )
+        if for_extraction and "visual_enabled" in identity:
+            irrelevant += ("visual_enabled",)
+        hashes = set()
+        speech = identity.get("speech")
+        if "media" in irrelevant and speech is None:
+            model = "Systran/faster-whisper-base.en"
+            speech = self.models.manifest(model) if self.models.available(model) else "not-prepared"
+        for flags in itertools.product((False, True), repeat=len(irrelevant)):
+            variant = {**identity, **dict(zip(irrelevant, flags, strict=True))}
+            variant.pop("speech", None)
+            visual = variant.pop("visual_enabled", None)
+            if variant["media"]:
+                variant["speech"] = speech
+            if visual is not None:
+                variant["visual_enabled"] = visual
+            hashes.add(hashlib.sha256(json_dump(variant).encode()).hexdigest())
+            if "presentation" in variant:
+                presentation = variant["presentation"]
+                seconds = presentation["ocr_seconds"]
+                if seconds.is_integer():
+                    numeric_variant = {
+                        **variant,
+                        "presentation": {**presentation, "ocr_seconds": int(seconds)},
+                    }
+                    hashes.add(hashlib.sha256(json_dump(numeric_variant).encode()).hexdigest())
+            if for_extraction and "visual_enabled" in variant:
+                variant.pop("visual_enabled")
+                hashes.add(hashlib.sha256(json_dump(variant).encode()).hexdigest())
+        if self._compatible_cache is not None:
+            self._compatible_cache[cache_key] = hashes
+        return hashes
+
+    def cached_vectors(self, profile: dict, hashes: list[str]) -> dict[str, np.ndarray]:
+        result: dict[str, np.ndarray] = {}
+        unique = list(dict.fromkeys(hashes))
+        for start in range(0, len(unique), 500):
+            batch = unique[start : start + 500]
+            with self.store.connect() as db:
+                for row in db.execute(
+                    f"SELECT input_hash,vector FROM embeddings WHERE profile_id=? AND input_hash IN ({','.join('?' for _ in batch)})",
+                    (profile["id"], *batch),
+                ):
+                    result.setdefault(
+                        row["input_hash"], np.frombuffer(row["vector"], dtype=np.float32).copy()
+                    )
+        return result
 
     def refresh_metadata(self, current: dict, path: Path, relative: str, stat) -> None:
         if (
@@ -346,15 +440,20 @@ class Indexer:
         self, path: Path, root: dict, job_id: str, verify: bool, forced: bool = False
     ) -> str:
         relative = path.relative_to(Path(root["path"])).as_posix()
-        if not path.resolve().is_relative_to(Path(root["path"]).resolve()) or any(
+        resolved = path.resolve()
+        if not resolved.is_relative_to(Path(root["path"]).resolve()) or any(
             is_link(parent) for parent in [path, *path.parents] if parent != parent.parent
         ):
             raise FileoraError("SOURCE_BLOCKED", "Source escaped the allowed folder")
         stat = path.stat()
-        key = os.path.normcase(str(path.resolve()))
-        current = self.store.one(
-            "SELECT f.*,v.sha256,v.pipeline_hash FROM files f LEFT JOIN file_revisions v ON v.id=f.active_revision_id WHERE path_key=?",
-            (key,),
+        key = os.path.normcase(str(resolved))
+        current = (
+            self._scan_records.get(key)
+            if self._scan_records is not None
+            else self.store.one(
+                "SELECT f.*,v.sha256,v.pipeline_hash FROM files f LEFT JOIN file_revisions v ON v.id=f.active_revision_id WHERE path_key=?",
+                (key,),
+            )
         )
         # Optional media is intentionally skipped, not reported as a parser failure.
         if (
@@ -363,8 +462,9 @@ class Indexer:
         ):
             return "skipped"
         pipeline = self.pipeline_hash(path)
+        compatible = self.compatible_pipelines(path)
         unchanged = (
-            current and current["status"] == "ready" and current["pipeline_hash"] == pipeline
+            current and current["status"] == "ready" and current["pipeline_hash"] in compatible
         )
         if (
             current is not None
@@ -385,20 +485,70 @@ class Indexer:
         if current is not None and unchanged and current["sha256"] == sha:
             self.refresh_metadata(current, path, relative, stat)
             return "skipped"
+        if self._before_extract:
+            self._before_extract()
+        extraction_compatible = self.compatible_pipelines(path, for_extraction=True)
+        donor = self.store.one(
+            f"SELECT v.id,v.warnings,f.modality FROM file_revisions v JOIN files f ON f.active_revision_id=v.id WHERE f.status='ready' AND f.extension=? AND v.sha256=? AND v.pipeline_hash IN ({','.join('?' for _ in extraction_compatible)}) LIMIT 1",
+            (path.suffix.lower(), sha, *extraction_compatible),
+        )
+        reused = (
+            self.store.rows(
+                "SELECT text,kind,locator,symbol,asset FROM chunks WHERE revision_id=? ORDER BY ordinal",
+                (donor["id"],),
+            )
+            if donor
+            else []
+        )
+        if donor and any(
+            row["asset"] and not (self.settings.data_dir / "assets" / row["asset"]).is_file()
+            for row in reused
+        ):
+            donor = None
         if current:
             with self.lock, self.store.connect() as db:
                 db.execute("UPDATE files SET status='stale' WHERE id=?", (current["id"],))
                 Store.changed(db)
-        extraction = (
-            supervised_extract(path, self.settings, lambda: self._cancelled(job_id))
-            if self.extractor is supervised_extract
-            else self.extractor(path, self.settings)
-        )
-        tokenizer = self.models.tokenizer()
-        units = chunk_units(
-            extraction.units, self.settings.chunk_tokens, self.settings.overlap_tokens, tokenizer
-        )
-        warnings = extraction.warnings[:]
+        if donor:
+            units = [
+                Unit(
+                    row["text"],
+                    row["kind"],
+                    json.loads(row["locator"]),
+                    row["symbol"],
+                    row["asset"],
+                )
+                for row in reused
+            ]
+            warnings = json.loads(donor["warnings"])
+            modality = donor["modality"]
+        else:
+            if path.suffix.lower() == ".ppt":
+                from fileora.presentations import libreoffice_command
+
+                if not libreoffice_command():
+                    raise FileoraError(
+                        "LEGACY_PPT_UNAVAILABLE",
+                        "Save this .ppt as .pptx in PowerPoint, or install local LibreOffice for automatic conversion",
+                    )
+            extraction = (
+                supervised_extract(path, self.settings, lambda: self._cancelled(job_id))
+                if self.extractor is supervised_extract
+                else self.extractor(path, self.settings)
+            )
+            tokenizer = (
+                self.models.tokenizer()
+                if any(unit.text.strip() for unit in extraction.units)
+                else None
+            )
+            units = chunk_units(
+                extraction.units,
+                self.settings.chunk_tokens,
+                self.settings.overlap_tokens,
+                tokenizer,
+            )
+            warnings = extraction.warnings[:]
+            modality = extraction.modality
         if not units:
             warnings.append("no_searchable_content")
         embeddings: dict[int, list[tuple[dict, np.ndarray, str]]] = {}
@@ -406,17 +556,14 @@ class Indexer:
         if self.models.available(self.settings.text_model) and text_units:
             profile = self.models.profile()
             missing = []
-            for i, unit in text_units:
-                input_hash = hashlib.sha256(unit.text.encode()).hexdigest()
-                cached = self.store.one(
-                    "SELECT vector FROM embeddings WHERE profile_id=? AND input_hash=? LIMIT 1",
-                    (profile["id"], input_hash),
-                )
-                if cached:
+            hashes = [hashlib.sha256(unit.text.encode()).hexdigest() for _, unit in text_units]
+            cached = self.cached_vectors(profile, hashes)
+            for (i, unit), input_hash in zip(text_units, hashes, strict=True):
+                if input_hash in cached:
                     embeddings.setdefault(i, []).append(
                         (
                             profile,
-                            np.frombuffer(cached["vector"], dtype=np.float32).copy(),
+                            cached[input_hash],
                             input_hash,
                         )
                     )
@@ -437,6 +584,17 @@ class Indexer:
                 from PIL import Image
 
                 profile = self.models.profile("vision")
+                cached = self.cached_vectors(profile, [unit.asset or sha for _, unit in visual])
+                missing_visual = []
+                for i, unit in visual:
+                    input_hash = unit.asset or sha
+                    if input_hash in cached:
+                        embeddings.setdefault(i, []).append(
+                            (profile, cached[input_hash], input_hash)
+                        )
+                    else:
+                        missing_visual.append((i, unit))
+                visual = missing_visual
                 for start in range(0, len(visual), 8):
                     batch = visual[start : start + 8]
                     images = []
@@ -476,7 +634,7 @@ class Indexer:
                         relative,
                         path.name,
                         path.suffix.lower(),
-                        extraction.modality,
+                        modality,
                         stat.st_size,
                         stat.st_mtime_ns,
                     ),
@@ -544,7 +702,7 @@ class Indexer:
                     )
             db.execute(
                 "UPDATE files SET size=?,mtime_ns=?,status='ready',error_code=NULL,active_revision_id=?,modality=? WHERE id=?",
-                (stat.st_size, stat.st_mtime_ns, revision_id, extraction.modality, file_id),
+                (stat.st_size, stat.st_mtime_ns, revision_id, modality, file_id),
             )
             db.execute(
                 "DELETE FROM chunks_fts WHERE rowid IN (SELECT c.id FROM chunks c JOIN file_revisions v ON v.id=c.revision_id WHERE v.file_id=? AND v.id!=?)",
@@ -564,6 +722,23 @@ class Indexer:
         self.store.execute(
             "UPDATE jobs SET state='running',started_at=CURRENT_TIMESTAMP WHERE id=?", (job_id,)
         )
+        self._compatible_cache, self._hash_cache = {}, {}
+        progress = dict.fromkeys(("total", "processed", "indexed", "skipped", "failed"), 0)
+        last_flush = last_cancel = time.monotonic()
+        checked_files = 0
+
+        def flush_progress():
+            nonlocal last_flush
+            if any(progress.values()):
+                self.store.execute(
+                    "UPDATE jobs SET total=total+?,processed=processed+?,indexed=indexed+?,skipped=skipped+?,failed=failed+? WHERE id=?",
+                    (*progress.values(), job_id),
+                )
+                for key in progress:
+                    progress[key] = 0
+            last_flush = time.monotonic()
+
+        self._before_extract = flush_progress
         try:
             for root in self.store.rows("SELECT * FROM roots WHERE enabled=1"):
                 folder = Path(root["path"])
@@ -590,6 +765,13 @@ class Indexer:
                 complete = True
                 seen = set()
                 exclusions = json.loads(root["exclusions"])
+                self._scan_records = {
+                    row["path_key"]: row
+                    for row in self.store.rows(
+                        "SELECT f.*,v.sha256,v.pipeline_hash FROM files f LEFT JOIN file_revisions v ON v.id=f.active_revision_id WHERE f.root_id=?",
+                        (root["id"],),
+                    )
+                }
 
                 def onerror(error):
                     nonlocal complete
@@ -622,7 +804,14 @@ class Indexer:
                             onerror(exc)
                     dirs[:] = safe_dirs
                     for name in sorted(names):
-                        if self._cancelled(job_id):
+                        check_cancel = (
+                            checked_files % 64 == 0 or time.monotonic() - last_cancel >= 0.1
+                        )
+                        checked_files += 1
+                        if check_cancel:
+                            last_cancel = time.monotonic()
+                        if check_cancel and self._cancelled(job_id):
+                            flush_progress()
                             self.store.execute(
                                 "UPDATE jobs SET state='cancelled',finished_at=CURRENT_TIMESTAMP WHERE id=?",
                                 (job_id,),
@@ -640,9 +829,7 @@ class Indexer:
                             if is_link(path) or is_hidden(path):
                                 continue
                             seen.add(os.path.normcase(str(path.absolute())))
-                            self.store.execute(
-                                "UPDATE jobs SET total=total+1 WHERE id=?", (job_id,)
-                            )
+                            progress["total"] += 1
                             result = self.process(
                                 path,
                                 root,
@@ -655,6 +842,7 @@ class Indexer:
                                 ),
                             )
                             if result == "cancelled":
+                                flush_progress()
                                 self.store.execute(
                                     "UPDATE jobs SET state='cancelled',finished_at=CURRENT_TIMESTAMP WHERE id=?",
                                     (job_id,),
@@ -664,6 +852,7 @@ class Indexer:
                                 )
                         except Exception as exc:
                             if getattr(exc, "code", None) == "CANCELLED":
+                                flush_progress()
                                 self.store.execute(
                                     "UPDATE jobs SET state='cancelled',finished_at=CURRENT_TIMESTAMP WHERE id=?",
                                     (job_id,),
@@ -684,15 +873,13 @@ class Indexer:
                                     )
                                     Store.changed(db)
                             self._error(job_id, relative, exc, current["id"] if current else None)
-                        self.store.execute(
-                            f"UPDATE jobs SET processed=processed+1,{result}={result}+1 WHERE id=?",
-                            (job_id,),
-                        )
+                        progress["processed"] += 1
+                        progress[result] += 1
+                        if progress["processed"] >= 64 or time.monotonic() - last_flush >= 0.25:
+                            flush_progress()
                 if complete:
                     with self.lock, self.store.connect() as db:
-                        for old in db.execute(
-                            "SELECT id,path_key FROM files WHERE root_id=?", (root["id"],)
-                        ).fetchall():
+                        for old in self._scan_records.values():
                             if old["path_key"] not in seen:
                                 db.execute(
                                     "DELETE FROM chunks_fts WHERE rowid IN (SELECT c.id FROM chunks c JOIN file_revisions v ON v.id=c.revision_id WHERE v.file_id=?)",
@@ -706,15 +893,21 @@ class Indexer:
                         db.execute(
                             "UPDATE roots SET last_scan=CURRENT_TIMESTAMP WHERE id=?", (root["id"],)
                         )
+            flush_progress()
             self.store.execute(
                 "UPDATE jobs SET state='completed',finished_at=CURRENT_TIMESTAMP WHERE id=?",
                 (job_id,),
             )
         except Exception as exc:
             self._error(job_id, "", exc)
+            flush_progress()
             self.store.execute(
                 "UPDATE jobs SET state='failed',finished_at=CURRENT_TIMESTAMP WHERE id=?", (job_id,)
             )
         finally:
+            flush_progress()
+            self._scan_records = self._pipeline_base = None
+            self._compatible_cache = self._hash_cache = None
+            self._before_extract = None
             self.cleanup_assets()
         return self.store.one("SELECT * FROM jobs WHERE id=?", (job_id,)) or {}

@@ -8,7 +8,7 @@ from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, Response
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from fileora.assistant import answer
+from fileora import __version__
 from fileora.config import (
     AUDIO_EXTENSIONS,
     IMAGE_EXTENSIONS,
@@ -54,7 +54,7 @@ def create_app(settings: Settings | None = None, service: Service | None = None)
 
     app = FastAPI(
         title="Fileora local API",
-        version="0.1.0",
+        version=__version__,
         lifespan=lifespan,
         docs_url=None,
         redoc_url=None,
@@ -279,10 +279,6 @@ def create_app(settings: Settings | None = None, service: Service | None = None)
     @app.get("/api/v1/assets/{chunk_id}")
     def asset(chunk_id: int):
         return FileResponse(service.asset(chunk_id), media_type="image/jpeg")
-
-    @app.post("/api/v1/answer")
-    def local_answer(request: SearchRequest):
-        return answer(service, request)
 
     dist = service.settings.frontend_dir
     if (dist / "assets").is_dir():

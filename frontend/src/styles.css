@@ -1031,35 +1031,6 @@ audio {
   color: var(--muted);
   margin-top: 5px;
 }
-.answer-panel {
-  margin-top: 26px;
-  padding: 22px;
-  background: #edf1e8;
-  border-radius: 6px;
-  border: 1px solid #dce5d4;
-}
-.answer-panel > p {
-  font-size: 13px;
-  white-space: pre-wrap;
-  line-height: 1.9;
-}
-.answer-panel p.small {
-  font-size: 10px;
-  margin-top: 12px;
-}
-.citations {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 15px;
-}
-.citations button {
-  font-size: 10px;
-  color: var(--accent);
-  background: white;
-  padding: 7px 9px;
-  border-radius: 3px;
-}
 .muted {
   color: var(--muted);
 }

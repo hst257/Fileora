@@ -1,8 +1,10 @@
-# Fileora
+# Fileora — V4 final
 
 **Local Multimodal Personal Search Engine** — find a note, PDF page, PowerPoint slide, code function, screenshot, or lecture moment using the way you remember it.
 
 Fileora runs on your computer with a React workspace and a FastAPI service. SQLite stores the catalog, passages, provenance, and normalized vectors; FAISS provides recoverable exact vector search. There are no paid APIs, accounts, telemetry, or runtime model downloads.
+
+V4 (package version **0.4.0**) is the final feature release: local text, code, PDF, PowerPoint, image, audio, and video search. V5 answer generation is skipped; there is no Ollama setup or generated-answer mode. Remaining work focuses on performance, reliability, and polish.
 
 ![Fileora workspace](docs/screenshots/workspace.png)
 
@@ -35,9 +37,14 @@ Run setup before startup. If setup reports that `fileora.exe` is being used by a
 | V2: maintainable search | SQLite FTS5 BM25 + semantic RRF; Java/Python Tree-sitter functions; other code line fallback; incremental SHA-256 caching; rename/delete reconciliation; jobs, cancellation, Watchdog, filters, optional cross-encoder reranking |
 | V3: images | PNG/JPEG thumbnails, offline Tesseract OCR with word boxes, scanned PDF page OCR, CLIP text-to-image retrieval, weighted file-level multimodal fusion |
 | V4: media (opt-in) | WAV/MP3/FLAC, MP4/MKV; local faster-whisper base.en with timestamps; sampled video frames with duplicate suppression and OCR/CLIP; native media preview seeking |
-| V5: answers (optional Ollama) | Local `qwen3:4b`, bounded retrieved excerpts, evidence IDs, citation validation, explicit unsupported/refusal responses; retrieval works when Ollama is absent |
 
-Every result includes a source path and its supporting passage, page, line range, or time interval. Default hybrid searches with one meaningful term (such as `BCNF`) require a literal text, OCR, filename, or symbol match. Longer queries retain semantic paraphrases while rejecting weak vector neighbors and incidental one-word lexical hits. Results distinguish term matches, meaning-based matches, and visual similarity. Select **Semantic** in Filters to explore related concepts for a single word; **Exact terms** uses literal OR-term retrieval. Scores rank candidates; they are **not confidence probabilities**. Verify the original evidence, especially for generated answers.
+Every result includes a source path and its supporting passage, page, line range, or time interval. Default hybrid searches with one meaningful term (such as `BCNF`) require a literal text, OCR, filename, or symbol match. Longer queries retain semantic paraphrases while rejecting weak vector neighbors and incidental one-word lexical hits. Results distinguish term matches, meaning-based matches, and visual similarity. Select **Semantic** in Filters to explore related concepts for a single word; **Exact terms** uses literal OR-term retrieval. Scores rank candidates; they are **not confidence probabilities**. Verify the original evidence when accuracy matters.
+
+## Fast rescans
+
+Use **Rescan library** for everyday updates; it checks metadata and skips unchanged content. **Verify all files** additionally hashes every source to catch changes with identical size and timestamp. Scans cache catalog/model metadata per job, batch progress writes and embedding-cache lookups, and reuse compatible extraction for exact copies and renames. Unrelated media/OCR switches no longer reparse ordinary notes. Video/scanned-PDF portable OCR reuses one worker per file. See [performance measurements and limits](docs/performance.md).
+
+On this Windows machine, an unchanged 1,000-file authored Markdown benchmark improved from **41.47 s to 1.64 s** for quick rescans and **41.68 s to 2.29 s** for full verification. These warm, lexical-only measurements isolate scan overhead; changed recordings and OCR-heavy files still take time to extract.
 
 ## Images and scanned PDFs
 
@@ -95,7 +102,6 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/setup.ps1 -Media
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/start.ps1 -Media
 ```
 
-For optional answers, install Ollama separately, run `ollama pull qwen3:4b` once, and keep its default loopback service running. Enable **Answer from my files** in Filters. Citations are checked for valid evidence IDs; entailment is not automatically guaranteed. Live Ollama generation is not validated on this machine; request, failure, refusal, and citation contracts are tested.
 
 ## Development and verification
 
@@ -130,7 +136,7 @@ The ten text topic families are split into development/test groups before evalua
 ## Repository
 
 ```text
-backend/src/fileora/   ingestion, catalog, retrieval, API, CLI, assistant, evaluation
+backend/src/fileora/   ingestion, catalog, retrieval, API, CLI, evaluation
 backend/tests/        correctness and API contracts
 frontend/src/         React workspace and source previews
 frontend/e2e/         real browser flows

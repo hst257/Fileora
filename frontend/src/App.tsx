@@ -26,7 +26,6 @@ import { api } from "./api";
 import { ImageEvidence } from "./ImageEvidence";
 import { MediaEvidence } from "./MediaEvidence";
 import type {
-  AnswerResponse,
   Evidence,
   FileDetail,
   Health,
@@ -129,7 +128,6 @@ export function App() {
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
   const [response, setResponse] = useState<SearchResponse>();
-  const [answer, setAnswer] = useState<AnswerResponse>();
   const [busy, setBusy] = useState(false);
   const [selected, setSelected] = useState<Result>();
   const [activeEvidence, setActiveEvidence] = useState<Evidence>();
@@ -142,7 +140,6 @@ export function App() {
   const [pathFilter, setPathFilter] = useState("");
   const [modifiedAfter, setModifiedAfter] = useState("");
   const [rerank, setRerank] = useState(false);
-  const [ask, setAsk] = useState(false);
   const [rootPath, setRootPath] = useState("");
   const [libraryBusy, setLibraryBusy] = useState(false);
   const [pendingWatch, setPendingWatch] = useState<boolean>();
@@ -226,7 +223,6 @@ export function App() {
     setView("search");
     setBusy(true);
     setError("");
-    setAnswer(undefined);
     setSelected(undefined);
     const filters: Record<string, unknown> = {};
     if (selectedModality) filters.modality = selectedModality;
@@ -238,24 +234,12 @@ export function App() {
       ).toISOString();
     try {
       const payload = { query: value, mode, filters, rerank, limit: 10 };
-      if (ask) {
-        const result = await api<AnswerResponse>("/answer", {
-          method: "POST",
-          body: JSON.stringify(payload),
-          signal: abort.signal,
-        });
-        if (!abort.signal.aborted) {
-          setAnswer(result);
-          setResponse(result.retrieval);
-        }
-      } else {
-        const result = await api<SearchResponse>("/search", {
-          method: "POST",
-          body: JSON.stringify(payload),
-          signal: abort.signal,
-        });
-        if (!abort.signal.aborted) setResponse(result);
-      }
+      const result = await api<SearchResponse>("/search", {
+        method: "POST",
+        body: JSON.stringify(payload),
+        signal: abort.signal,
+      });
+      if (!abort.signal.aborted) setResponse(result);
     } catch (err) {
       if (!abort.signal.aborted) setError((err as Error).message);
     } finally {
@@ -657,14 +641,6 @@ export function App() {
                   />
                   Rerank passages
                 </label>
-                <label className="checkbox">
-                  <input
-                    type="checkbox"
-                    checked={ask}
-                    onChange={(event) => setAsk(event.target.checked)}
-                  />
-                  Answer from my files
-                </label>
                 <button className="text-button" onClick={() => void search()}>
                   Apply filters <ArrowRight size={15} />
                 </button>
@@ -673,35 +649,8 @@ export function App() {
             {busy && (
               <div className="search-loading" role="status">
                 <Spinner className="spin" size={20} />
-                {ask
-                  ? "Reading your retrieved excerpts…"
-                  : "Looking through your library…"}
+                Looking through your library…
               </div>
-            )}
-            {answer && (
-              <section className="answer-panel">
-                <div className="section-label">ANSWER FROM YOUR FILES</div>
-                <p>{answer.answer}</p>
-                {answer.notice && (
-                  <p className="small muted">{answer.notice}</p>
-                )}
-                <div className="citations">
-                  {answer.citations.map((citation) => (
-                    <button
-                      key={citation.id}
-                      onClick={() => {
-                        const result = response?.results.find(
-                          (r) => r.file_id === citation.file_id,
-                        );
-                        if (result) setSelected(result);
-                      }}
-                    >
-                      [{citation.id}] {citation.name} ·{" "}
-                      {locationLabel(citation.locator)}
-                    </button>
-                  ))}
-                </div>
-              </section>
             )}
             {response?.warnings.map((warning) => (
               <div className="alert warning-alert" key={warning}>

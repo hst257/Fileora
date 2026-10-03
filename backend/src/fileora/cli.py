@@ -67,7 +67,6 @@ def parser() -> argparse.ArgumentParser:
         default=None,
         help="Override the saved automatic-update preference for this run",
     )
-    serve.add_argument("--ollama-model", default="qwen3:4b")
     search = sub.add_parser("search")
     search.add_argument("query")
     search.add_argument("--mode", choices=("semantic", "lexical", "hybrid"), default="hybrid")
@@ -135,7 +134,6 @@ def main() -> None:
 
             from fileora.api import create_app
 
-            settings.ollama_model = args.ollama_model
             uvicorn.run(
                 create_app(settings), host="127.0.0.1", port=args.port, workers=1, access_log=False
             )

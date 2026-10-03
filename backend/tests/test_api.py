@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import pytest
-
 
 def test_search_contract(client):
     response = client.post("/api/v1/search", json={"query": "Dijkstra", "mode": "lexical"})
@@ -60,76 +58,10 @@ def test_job_routes(client):
     assert client.post(f"/api/v1/jobs/{job_id}/cancel").status_code == 202
 
 
-def test_unknown_ollama_error_is_actionable(client, monkeypatch):
-    import httpx
-
-    import fileora.assistant
-
-    def unavailable(*args, **kwargs):
-        raise httpx.ConnectError("offline")
-
-    monkeypatch.setattr(fileora.assistant.httpx, "post", unavailable)
-    result = client.post("/api/v1/answer", json={"query": "Dijkstra", "mode": "lexical"})
-    assert result.status_code == 503
-    assert result.json()["error"]["code"] == "LLM_UNAVAILABLE"
+def test_final_v4_exposes_search_without_v5_generation(client):
+    assert client.post("/api/v1/answer", json={"query": "Dijkstra"}).status_code in (404, 405)
+    assert "/api/v1/answer" not in client.get("/api/openapi.json").json()["paths"]
     assert (
         client.post("/api/v1/search", json={"query": "Dijkstra", "mode": "lexical"}).status_code
         == 200
-    )
-
-
-@pytest.mark.parametrize(
-    "content,code",
-    [("A claim [E999]", "INVALID_CITATIONS"), ("A claim without citation", "INVALID_CITATIONS")],
-)
-def test_unknown_citations_rejected(client, monkeypatch, content, code):
-    import httpx
-
-    import fileora.assistant
-
-    monkeypatch.setattr(
-        fileora.assistant.httpx,
-        "post",
-        lambda *args, **kwargs: httpx.Response(
-            200,
-            json={"message": {"content": content}},
-            request=httpx.Request("POST", "http://127.0.0.1"),
-        ),
-    )
-    result = client.post("/api/v1/answer", json={"query": "Dijkstra", "mode": "lexical"})
-    assert result.status_code == 422
-    assert result.json()["error"]["code"] == code
-
-
-def test_valid_citation_and_refusal(client, monkeypatch):
-    import httpx
-
-    import fileora.assistant
-
-    monkeypatch.setattr(
-        fileora.assistant.httpx,
-        "post",
-        lambda *args, **kwargs: httpx.Response(
-            200,
-            json={"message": {"content": "Dijkstra uses a priority queue [E1]."}},
-            request=httpx.Request("POST", "http://127.0.0.1"),
-        ),
-    )
-    result = client.post("/api/v1/answer", json={"query": "Dijkstra", "mode": "lexical"}).json()
-    assert result["citations"][0]["id"] == "E1"
-    assert result["supported"] is None
-    monkeypatch.setattr(
-        fileora.assistant.httpx,
-        "post",
-        lambda *args, **kwargs: httpx.Response(
-            200,
-            json={"message": {"content": "INSUFFICIENT_EVIDENCE"}},
-            request=httpx.Request("POST", "http://127.0.0.1"),
-        ),
-    )
-    assert (
-        client.post("/api/v1/answer", json={"query": "Dijkstra", "mode": "lexical"}).json()[
-            "supported"
-        ]
-        is False
     )
