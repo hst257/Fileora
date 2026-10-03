@@ -7,6 +7,15 @@ export type Locator = {
   start_ms?: number;
   end_ms?: number;
   symbol?: string;
+  width?: number;
+  height?: number;
+  boxes?: {
+    text: string;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  }[];
 };
 export type Evidence = {
   chunk_id: number;
@@ -55,6 +64,9 @@ export type Health = {
   device: string;
   ocr_enabled: boolean;
   vision_enabled: boolean;
+  vision_ready?: boolean;
+  ocr_ready?: boolean;
+  ocr_engine?: "native" | "portable" | null;
   media_enabled: boolean;
   model_setup_command?: string;
   watch?: WatchStatus;

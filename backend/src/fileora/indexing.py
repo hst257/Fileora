@@ -302,6 +302,8 @@ class Indexer:
                 "ocr_max_images": self.settings.ppt_ocr_max_images,
                 "ocr_engine": engine_identity() if self.settings.enable_ocr else "disabled",
             }
+        if path and path.suffix.lower() in IMAGE_EXTENSIONS | {".pdf"}:
+            identity["image_provenance"] = 1
         for kind, model in (
             ("text", self.settings.text_model),
             ("vision", "openai/clip-vit-base-patch32"),

@@ -39,6 +39,10 @@ Run setup before startup. If setup reports that `fileora.exe` is being used by a
 
 Every result includes a source path and its supporting passage, page, line range, or time interval. Default hybrid searches with one meaningful term (such as `BCNF`) require a literal text, OCR, filename, or symbol match. Longer queries retain semantic paraphrases while rejecting weak vector neighbors and incidental one-word lexical hits. Results distinguish term matches, meaning-based matches, and visual similarity. Select **Semantic** in Filters to explore related concepts for a single word; **Exact terms** uses literal OR-term retrieval. Scores rank candidates; they are **not confidence probabilities**. Verify the original evidence, especially for generated answers.
 
+## Images and scanned PDFs
+
+V3 image search also includes query-matched word highlights in screenshot/scanned-page previews and local OCR/CLIP availability in **My library**. Restart and rescan existing image/PDF folders to populate preview coordinates. See the [V3 milestone and checks](docs/v3.md).
+
 ## PowerPoint search
 
 Native slide text is extracted before image OCR. Portable OCR reuses one worker per deck, and repeated images reuse content-addressed results; duplicate passages are embedded once while retaining each source location. The default optional image pass allows 20 seconds and 48 unique images per deck, prioritizing large images on slides with little native text. Oversized or unsupported images and exhausted OCR budgets produce file-preview notes; extracted text and speaker notes remain searchable. These limits can miss text that exists only inside an unprocessed image.

@@ -44,6 +44,7 @@ describe("Workspace", () => {
     empty = false,
     watchFailure = false,
     presentation = false,
+    document = false,
   ) {
     let watchEnabled = false;
     const watch = () => ({
@@ -127,19 +128,29 @@ describe("Workspace", () => {
                 : [
                     {
                       file_id: 1,
-                      name: presentation ? "lecture.pptx" : "notes.md",
+                      name: document
+                        ? "paper.pdf"
+                        : presentation
+                          ? "lecture.pptx"
+                          : "notes.md",
                       relative_path: "notes.md",
                       path: "C:/notes.md",
-                      modality: presentation ? "presentation" : "text",
+                      modality: document
+                        ? "document"
+                        : presentation
+                          ? "presentation"
+                          : "text",
                       match_kind: "terms",
                       extension: presentation ? ".pptx" : ".md",
                       evidence: [
                         {
                           chunk_id: 1,
                           snippet: "Critical sections use semaphores.",
-                          locator: presentation
-                            ? { slide: 2, section: "notes" }
-                            : { line_start: 1 },
+                          locator: document
+                            ? { page: 2 }
+                            : presentation
+                              ? { slide: 2, section: "notes" }
+                              : { line_start: 1 },
                           kind: "text",
                           symbol: "",
                           asset_url: null,
@@ -232,6 +243,22 @@ describe("Workspace", () => {
     expect(screen.getAllByText("Slide 2 · Speaker notes")).toHaveLength(2);
     expect(
       screen.queryByRole("img", { name: "Preview of lecture.pptx" }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("keeps PDF preview evidence on the matching page", async () => {
+    mockService(false, false, false, true);
+    render(<App />);
+    fireEvent.change(screen.getByLabelText("Search your files"), {
+      target: { value: "semaphores" },
+    });
+    fireEvent.click(screen.getByLabelText("Run search"));
+    const heading = await screen.findByRole("heading", { name: "paper.pdf" });
+    fireEvent.click(heading.closest("button")!);
+    const original = await screen.findByRole("link", { name: "Open original" });
+    expect(original).toHaveAttribute("href", "/api/v1/files/1/preview#page=2");
+    expect(
+      screen.queryByRole("img", { name: "Preview of paper.pdf" }),
     ).not.toBeInTheDocument();
   });
 

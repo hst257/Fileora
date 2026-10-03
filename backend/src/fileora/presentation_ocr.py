@@ -24,7 +24,7 @@ SCRIPT = Path(__file__).resolve().parents[3] / "scripts" / "ocr" / "recognize.cj
 
 def engine_identity() -> str:
     native = os.getenv("FILEORA_TESSERACT_CMD") or shutil.which("tesseract")
-    identity = ["ppt-ocr-v2", native or "portable", os.getenv("TESSDATA_PREFIX", "")]
+    identity = ["ppt-ocr-v3", native or "portable", os.getenv("TESSDATA_PREFIX", "")]
     for path in (Path(native) if native else SCRIPT, SCRIPT.parent / "package-lock.json"):
         if path.is_file():
             stat = path.stat()
@@ -127,6 +127,8 @@ class PresentationOCR:
                         not isinstance(cached, dict)
                         or not isinstance(cached.get("text"), str)
                         or not isinstance(cached.get("boxes"), list)
+                        or not isinstance(cached.get("width"), int)
+                        or not isinstance(cached.get("height"), int)
                         or (
                             cached["text"]
                             and (
@@ -147,7 +149,13 @@ class PresentationOCR:
                     Unit(
                         cached["text"],
                         "ocr",
-                        {**locator, "boxes": cached["boxes"], "ocr_cache_key": key},
+                        {
+                            **locator,
+                            "boxes": cached["boxes"],
+                            "ocr_cache_key": key,
+                            "width": cached["width"],
+                            "height": cached["height"],
+                        },
                         asset=cached.get("asset"),
                     )
                     if cached["text"]
@@ -155,6 +163,7 @@ class PresentationOCR:
                 )
             rgb = ImageOps.exif_transpose(source).convert("RGB")
             rgb.thumbnail((1600, 1600))
+            width, height = rgb.size
             if os.getenv("FILEORA_TESSERACT_CMD") or shutil.which("tesseract"):
                 unit = ocr_image(rgb, {}, self.settings, timeout=timeout)
             else:
@@ -164,6 +173,8 @@ class PresentationOCR:
                 "text": unit.text if unit else "",
                 "boxes": unit.locator.get("boxes", []) if unit else [],
                 "asset": asset,
+                "width": width,
+                "height": height,
             }
             # Atomic publication avoids accepting half-written OCR after cancellation.
             temp = target.with_suffix(".tmp")
@@ -178,7 +189,13 @@ class PresentationOCR:
                 Unit(
                     payload["text"],
                     "ocr",
-                    {**locator, "boxes": payload["boxes"], "ocr_cache_key": key},
+                    {
+                        **locator,
+                        "boxes": payload["boxes"],
+                        "ocr_cache_key": key,
+                        "width": width,
+                        "height": height,
+                    },
                     asset=asset,
                 )
                 if unit

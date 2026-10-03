@@ -23,6 +23,7 @@ import {
   X,
 } from "@phosphor-icons/react";
 import { api } from "./api";
+import { ImageEvidence } from "./ImageEvidence";
 import type {
   AnswerResponse,
   FileDetail,
@@ -329,13 +330,36 @@ export function App() {
     }
   }
 
+  const loc = selected?.evidence[0]?.locator;
+  const fallbackImage = detail?.chunks.find(
+    (chunk) =>
+      chunk.asset &&
+      (selected?.modality === "image" ||
+        selected?.modality === "video" ||
+        selected?.modality === "audio" ||
+        (selected?.modality === "document" &&
+          loc?.page &&
+          chunk.locator.page === loc.page)),
+  );
   const asset =
     selected?.evidence.find((e) => e.asset_url)?.asset_url ||
-    (selected?.modality !== "presentation" &&
-    detail?.chunks.find((c) => c.asset)
-      ? `/api/v1/assets/${detail.chunks.find((c) => c.asset)!.id}`
-      : undefined);
-  const loc = selected?.evidence[0]?.locator;
+    (fallbackImage ? `/api/v1/assets/${fallbackImage.id}` : undefined);
+  const picturedEvidence = selected?.evidence.find(
+    (item) => item.asset_url === asset,
+  );
+  const picturedChunk = detail?.chunks.find(
+    (chunk) =>
+      chunk.id === picturedEvidence?.chunk_id ||
+      asset === `/api/v1/assets/${chunk.id}`,
+  );
+  const imageLocator = picturedEvidence?.locator.boxes
+    ? picturedEvidence.locator
+    : detail?.chunks.find(
+        (chunk) =>
+          chunk.asset &&
+          chunk.asset === picturedChunk?.asset &&
+          chunk.locator.boxes,
+      )?.locator;
   const previewUrl = selected
     ? `/api/v1/files/${selected.file_id}/preview${loc?.page ? "#page=" + loc.page : ""}`
     : "";
@@ -771,10 +795,12 @@ export function App() {
                       ) : (
                         <>
                           {asset && (
-                            <img
-                              className="image-preview"
+                            <ImageEvidence
+                              key={asset}
                               src={asset}
-                              alt={`Preview of ${selected.name}`}
+                              name={selected.name}
+                              locator={imageLocator}
+                              query={response.query}
                             />
                           )}{" "}
                           {detail &&
@@ -929,6 +955,55 @@ export function App() {
                 <span>indexed folders</span>
               </div>
             </div>
+            <section
+              className="image-search-status"
+              aria-label="Image search capabilities"
+            >
+              <h2>Search inside images</h2>
+              <p className="small muted">
+                Find screenshots by their words, or describe what you remember
+                seeing. Processing stays on this device.
+              </p>
+              <div className="image-capabilities">
+                <div>
+                  <strong>Text in images</strong>
+                  <span>
+                    {!health
+                      ? "Checking…"
+                      : !health.ocr_enabled
+                        ? "Off"
+                        : health.ocr_ready
+                          ? "Available locally"
+                          : "OCR setup needed"}
+                  </span>
+                </div>
+                <div>
+                  <strong>Images by description</strong>
+                  <span>
+                    {!health
+                      ? "Checking…"
+                      : !health.vision_enabled
+                        ? "Off"
+                        : health.vision_ready
+                          ? "Available locally"
+                          : "CLIP model setup needed"}
+                  </span>
+                </div>
+              </div>
+              <p className="small muted">
+                Use the Images filter with a phrase such as “a diagram of
+                virtual memory”. A single keyword requires a text match;
+                Semantic mode can explore related images.
+              </p>
+              {health &&
+                ((health.ocr_enabled && !health.ocr_ready) ||
+                  (health.vision_enabled && !health.vision_ready)) && (
+                  <p className="small">
+                    Stop Fileora and run setup to prepare the missing local
+                    tools, then restart and rescan.
+                  </p>
+                )}
+            </section>
             <section
               className="watch-section"
               aria-label="Automatic library updates"

@@ -14,9 +14,11 @@ from fileora.config import (
     IMAGE_EXTENSIONS,
     PRESENTATION_EXTENSIONS,
     VIDEO_EXTENSIONS,
+    VISION_MODEL,
     Settings,
 )
 from fileora.domain import FileoraError
+from fileora.extraction import ocr_capability
 from fileora.retrieval import SearchRequest
 from fileora.service import Service
 
@@ -152,6 +154,7 @@ def create_app(settings: Settings | None = None, service: Service | None = None)
     def health():
         data_path = str(service.settings.data_dir).replace("'", "''")
         model_path = str(service.settings.models_dir).replace("'", "''")
+        ocr = ocr_capability(service.settings)
         return {
             "status": "ready",
             "offline": True,
@@ -159,7 +162,11 @@ def create_app(settings: Settings | None = None, service: Service | None = None)
             "semantic_ready": service.models.available(service.settings.text_model),
             "device": service.models.device,
             "vision_enabled": service.settings.enable_vision,
+            "vision_ready": service.settings.enable_vision
+            and service.models.available(VISION_MODEL),
             "ocr_enabled": service.settings.enable_ocr,
+            "ocr_ready": ocr["ready"],
+            "ocr_engine": ocr["engine"],
             "media_enabled": service.settings.enable_media,
             "watch": service.worker.watch_status(),
             "model_setup_command": f"fileora --data-dir '{data_path}' --models-dir '{model_path}' models download {service.settings.text_model}",

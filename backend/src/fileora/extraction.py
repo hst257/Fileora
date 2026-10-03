@@ -215,6 +215,22 @@ def thumbnail(image, settings: Settings, key: str) -> str:
     return name
 
 
+def ocr_capability(settings: Settings) -> dict:
+    """Report installed local tooling without loading a model or starting a process."""
+    configured = os.getenv("FILEORA_TESSERACT_CMD")
+    native = bool(Path(configured).is_file()) if configured else bool(shutil.which("tesseract"))
+    script = Path(__file__).resolve().parents[3] / "scripts" / "ocr" / "recognize.cjs"
+    portable = not configured and (
+        bool(shutil.which("node"))
+        and script.is_file()
+        and (script.parent / "node_modules" / "@tesseract.js-data" / "eng").is_dir()
+    )
+    return {
+        "ready": settings.enable_ocr and (native or portable),
+        "engine": "native" if native else "portable" if portable else None,
+    }
+
+
 def extract(path: Path, settings: Settings) -> Extraction:
     ext = path.suffix.lower()
     if ext in PRESENTATION_EXTENSIONS:
@@ -229,6 +245,7 @@ def extract(path: Path, settings: Settings) -> Extraction:
             raise FileoraError("ENCRYPTED_PDF", "Encrypted PDFs are not indexed")
         units, warnings = [], []
         rendered = None
+        source_hash = None
         for i, page in enumerate(reader.pages, 1):
             content = page.get_contents()
             if content and len(content.get_data()) > 20 * 1024 * 1024:
@@ -246,8 +263,15 @@ def extract(path: Path, settings: Settings) -> Extraction:
                     image = rendered[i - 1].render(scale=1.5).to_pil()
                     if image.width * image.height > settings.max_image_pixels:
                         raise FileoraError("IMAGE_TOO_LARGE", "Rendered page exceeds pixel limit")
-                    unit = ocr_image(image, {"page": i}, settings)
+                    unit = ocr_image(
+                        image, {"page": i, "width": image.width, "height": image.height}, settings
+                    )
                     if unit:
+                        if source_hash is None:
+                            source_hash = hashlib.sha256(path.read_bytes()).hexdigest()
+                        unit.asset = thumbnail(
+                            image.copy(), settings, f"pdf:{source_hash}:page:{i}"
+                        )
                         units.append(unit)
                     else:
                         warnings.append(f"page_{i}:empty_ocr")
@@ -269,8 +293,11 @@ def extract(path: Path, settings: Settings) -> Extraction:
             warnings = []
             if settings.enable_ocr:
                 try:
-                    unit = ocr_image(image, {}, settings)
+                    unit = ocr_image(
+                        image, {"width": image.width, "height": image.height}, settings
+                    )
                     if unit:
+                        unit.asset = asset
                         units.append(unit)
                 except FileoraError as exc:
                     warnings.append(exc.code)
