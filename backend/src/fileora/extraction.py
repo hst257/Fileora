@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import json
 import multiprocessing as mp
 import os
@@ -231,6 +232,14 @@ def ocr_capability(settings: Settings) -> dict:
     }
 
 
+def media_capability() -> dict:
+    """Check optional packages without loading a decoder or speech model."""
+    return {
+        "decoder": importlib.util.find_spec("av") is not None,
+        "speech": importlib.util.find_spec("faster_whisper") is not None,
+    }
+
+
 def extract(path: Path, settings: Settings) -> Extraction:
     ext = path.suffix.lower()
     if ext in PRESENTATION_EXTENSIONS:
@@ -357,13 +366,20 @@ def media(path: Path, settings: Settings) -> Extraction:
                 asset = thumbnail(image.copy(), settings, key)
                 loc = {
                     "start_ms": int(timestamp * 1000),
-                    "end_ms": int((timestamp + settings.frame_interval) * 1000),
+                    "end_ms": int(
+                        min(timestamp + settings.frame_interval, duration) * 1000
+                        if duration
+                        else (timestamp + settings.frame_interval) * 1000
+                    ),
+                    "width": image.width,
+                    "height": image.height,
                 }
                 units.append(Unit("", "frame", loc, asset=asset))
                 if settings.enable_ocr:
                     try:
                         unit = ocr_image(image, loc, settings)
                         if unit:
+                            unit.asset = asset
                             units.append(unit)
                     except FileoraError as exc:
                         warnings.append(exc.code)
@@ -372,53 +388,72 @@ def media(path: Path, settings: Settings) -> Extraction:
                     warnings.append("frame_limit_reached")
                     break
     if has_audio:
-        if not (model_path / "fileora-manifest.json").exists():
-            raise FileoraError("MODEL_UNAVAILABLE", "Prepare Systran/faster-whisper-base.en")
         try:
-            from faster_whisper import WhisperModel
-        except ImportError as exc:
-            raise FileoraError("MEDIA_UNAVAILABLE", "Install backend[media]") from exc
-        try:
-            speech = WhisperModel(
-                str(model_path),
-                device="cuda" if settings.device == "cuda" else "cpu",
-                compute_type="int8",
-                local_files_only=True,
+            units.extend(transcribe_media(path, settings, model_path, warnings, duration))
+        except (FileoraError, RuntimeError) as exc:
+            # A missing/broken speech engine must not discard searchable video frames.
+            if not units:
+                raise FileoraError(
+                    getattr(exc, "code", "TRANSCRIPTION_FAILED"),
+                    getattr(exc, "message", "Could not transcribe this recording"),
+                ) from exc
+            warnings.append(
+                f"transcription_unavailable:{getattr(exc, 'code', 'TRANSCRIPTION_FAILED')}"
             )
-        except RuntimeError:
-            speech = WhisperModel(
-                str(model_path), device="cpu", compute_type="int8", local_files_only=True
-            )
-
-        def transcribe(model):
-            segments, _ = model.transcribe(str(path), language="en", vad_filter=True)
-            return [
-                Unit(
-                    segment.text.strip(),
-                    "transcript",
-                    {"start_ms": int(segment.start * 1000), "end_ms": int(segment.end * 1000)},
-                )
-                for segment in segments
-                if segment.text.strip()
-            ]
-
-        try:
-            transcript = transcribe(speech)
-        except RuntimeError:
-            if settings.device != "cuda":
-                raise
-            del speech
-            speech = WhisperModel(
-                str(model_path), device="cpu", compute_type="int8", local_files_only=True
-            )
-            transcript = transcribe(speech)
-            warnings.append("speech_cpu_fallback")
-        units.extend(transcript)
     else:
         warnings.append("no_audio_stream")
     return Extraction(
         units, warnings, "video" if path.suffix.lower() in VIDEO_EXTENSIONS else "audio"
     )
+
+
+def transcribe_media(
+    path: Path, settings: Settings, model_path: Path, warnings: list, duration: float = 0
+) -> list[Unit]:
+    if not (model_path / "fileora-manifest.json").exists():
+        raise FileoraError("MODEL_UNAVAILABLE", "Prepare Systran/faster-whisper-base.en")
+    try:
+        from faster_whisper import WhisperModel
+    except ImportError as exc:
+        raise FileoraError("MEDIA_UNAVAILABLE", "Install backend[media]") from exc
+    try:
+        speech = WhisperModel(
+            str(model_path),
+            device="cuda" if settings.device == "cuda" else "cpu",
+            compute_type="int8",
+            local_files_only=True,
+        )
+    except RuntimeError:
+        speech = WhisperModel(
+            str(model_path), device="cpu", compute_type="int8", local_files_only=True
+        )
+
+    def transcribe(model):
+        segments, _ = model.transcribe(str(path), language="en", vad_filter=True)
+        result = []
+        for segment in segments:
+            start = max(0, int(segment.start * 1000))
+            end = max(start, int(segment.end * 1000))
+            if duration > 0:
+                start, end = min(start, int(duration * 1000)), min(end, int(duration * 1000))
+            if segment.text.strip() and end > start:
+                result.append(
+                    Unit(segment.text.strip(), "transcript", {"start_ms": start, "end_ms": end})
+                )
+        return result
+
+    try:
+        transcript = transcribe(speech)
+    except RuntimeError:
+        if settings.device != "cuda":
+            raise
+        del speech
+        speech = WhisperModel(
+            str(model_path), device="cpu", compute_type="int8", local_files_only=True
+        )
+        transcript = transcribe(speech)
+        warnings.append("speech_cpu_fallback")
+    return transcript
 
 
 def _child(connection, path: Path, settings: Settings) -> None:

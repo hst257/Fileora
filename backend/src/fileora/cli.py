@@ -29,7 +29,10 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--ocr", action="store_true", help="Run local Tesseract OCR")
     result.add_argument("--vision", action="store_true", help="Create and search CLIP embeddings")
     result.add_argument(
-        "--media", action="store_true", help="Transcribe audio and sample video frames"
+        "--media",
+        action=argparse.BooleanOptionalAction,
+        default=None,
+        help="Override the saved audio/video processing preference for this run",
     )
     result.add_argument("--chunk-tokens", type=int, default=192)
     result.add_argument("--overlap-tokens", type=int, default=32)

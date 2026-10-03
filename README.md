@@ -43,6 +43,10 @@ Every result includes a source path and its supporting passage, page, line range
 
 V3 image search also includes query-matched word highlights in screenshot/scanned-page previews and local OCR/CLIP availability in **My library**. Restart and rescan existing image/PDF folders to populate preview coordinates. See the [V3 milestone and checks](docs/v3.md).
 
+## Audio and video search
+
+V4 adds recording capability status, clickable timestamp evidence, and matching-word highlights over sampled video frames. Stop Fileora, run `scripts/setup.ps1 -Media`, then `scripts/start.ps1 -Media`. In **My library**, enable **Transcribe audio and video** to save the choice, and rescan a recording folder. Use **Audio** or **Video**, open a match, choose its timestamp, and press Play. Processing runs locally; transcription can take time on CPU. New catalogs start with media off; `-Media` / `-NoMedia` override the saved choice for a launch. See the [V4 milestone and checks](docs/v4.md).
+
 ## PowerPoint search
 
 Native slide text is extracted before image OCR. Portable OCR reuses one worker per deck, and repeated images reuse content-addressed results; duplicate passages are embedded once while retaining each source location. The default optional image pass allows 20 seconds and 48 unique images per deck, prioritizing large images on slides with little native text. Oversized or unsupported images and exhausted OCR budgets produce file-preview notes; extracted text and speaker notes remain searchable. These limits can miss text that exists only inside an unprocessed image.

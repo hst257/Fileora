@@ -70,7 +70,7 @@ class Settings:
     frame_interval: int = 10
     max_frames: int = 1500
     enable_ocr: bool = False
-    enable_media: bool = False
+    enable_media: bool | None = None
     enable_vision: bool = False
     watch: bool | None = None
     reconcile_seconds: int = 900

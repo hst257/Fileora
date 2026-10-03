@@ -68,6 +68,10 @@ export type Health = {
   ocr_ready?: boolean;
   ocr_engine?: "native" | "portable" | null;
   media_enabled: boolean;
+  media_ready?: boolean;
+  transcription_ready?: boolean;
+  media_dependencies_ready?: boolean;
+  speech_model_ready?: boolean;
   model_setup_command?: string;
   watch?: WatchStatus;
 };

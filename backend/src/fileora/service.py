@@ -68,6 +68,9 @@ class Service:
         self.settings = settings
         settings.prepare()
         self.store = Store(settings.data_dir)
+        if settings.enable_media is None:
+            preference = self.store.one("SELECT value FROM app_meta WHERE key='media_enabled'")
+            settings.enable_media = bool(preference and preference["value"] == "true")
         if settings.watch is None:
             preference = self.store.one("SELECT value FROM app_meta WHERE key='watch_enabled'")
             settings.watch = bool(preference and preference["value"] == "true")
@@ -90,6 +93,22 @@ class Service:
                 ("true" if enabled else "false",),
             )
             return self.worker.watch_status()
+
+    def configure_media(self, enabled: bool) -> dict:
+        with self.lock:
+            if self.store.one("SELECT id FROM jobs WHERE state IN ('queued','running') LIMIT 1"):
+                raise FileoraError(
+                    "INDEX_BUSY",
+                    "Wait for the current scan to finish before changing transcription",
+                    409,
+                )
+            self.store.execute(
+                "INSERT INTO app_meta(key,value) VALUES('media_enabled',?) "
+                "ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+                ("true" if enabled else "false",),
+            )
+            self.settings.enable_media = enabled
+            return {"enabled": enabled}
 
     def source(self, file_id: int) -> tuple[Path, dict]:
         row = self.store.one(

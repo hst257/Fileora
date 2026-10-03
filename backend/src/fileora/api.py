@@ -18,7 +18,7 @@ from fileora.config import (
     Settings,
 )
 from fileora.domain import FileoraError
-from fileora.extraction import ocr_capability
+from fileora.extraction import media_capability, ocr_capability
 from fileora.retrieval import SearchRequest
 from fileora.service import Service
 
@@ -155,6 +155,8 @@ def create_app(settings: Settings | None = None, service: Service | None = None)
         data_path = str(service.settings.data_dir).replace("'", "''")
         model_path = str(service.settings.models_dir).replace("'", "''")
         ocr = ocr_capability(service.settings)
+        media = media_capability()
+        speech_ready = service.models.available("Systran/faster-whisper-base.en")
         return {
             "status": "ready",
             "offline": True,
@@ -168,6 +170,13 @@ def create_app(settings: Settings | None = None, service: Service | None = None)
             "ocr_ready": ocr["ready"],
             "ocr_engine": ocr["engine"],
             "media_enabled": service.settings.enable_media,
+            "media_ready": service.settings.enable_media and media["decoder"],
+            "transcription_ready": service.settings.enable_media
+            and media["decoder"]
+            and media["speech"]
+            and speech_ready,
+            "media_dependencies_ready": media["decoder"] and media["speech"],
+            "speech_model_ready": speech_ready,
             "watch": service.worker.watch_status(),
             "model_setup_command": f"fileora --data-dir '{data_path}' --models-dir '{model_path}' models download {service.settings.text_model}",
         }
@@ -183,6 +192,10 @@ def create_app(settings: Settings | None = None, service: Service | None = None)
     @app.put("/api/v1/index/watch")
     def configure_watch(request: WatchRequest):
         return service.configure_watch(request.enabled)
+
+    @app.put("/api/v1/index/media")
+    def configure_media(request: WatchRequest):
+        return service.configure_media(request.enabled)
 
     @app.post("/api/v1/search")
     def search(request: SearchRequest):

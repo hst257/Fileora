@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import json
 import re
 from pathlib import Path
@@ -31,8 +32,20 @@ def word_error_rate(reference: str, hypothesis: str) -> dict:
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--data-dir", type=Path, default=Path(".fileora"))
+    parser.add_argument("--models-dir", type=Path)
+    parser.add_argument(
+        "--output", type=Path, default=Path("evaluation/reports/media.json")
+    )
+    args = parser.parse_args()
     service = Service(
-        Settings(data_dir=Path(".fileora"), device="cpu", enable_media=True)
+        Settings(
+            data_dir=args.data_dir,
+            models_dir=args.models_dir,
+            device="cpu",
+            enable_media=True,
+        )
     )
     service.instance.acquire()
     try:
@@ -56,7 +69,8 @@ def main():
             "model": "Systran/faster-whisper-base.en",
             "segments": len(rows),
         }
-        output = Path("evaluation/reports/media.json")
+        output = args.output
+        output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(json.dumps(report, indent=2), encoding="utf-8")
         print(
             json.dumps(

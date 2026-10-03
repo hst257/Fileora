@@ -261,9 +261,10 @@ class Indexer:
 
     def create_job(self, verify: bool = False) -> str:
         job_id = uuid.uuid4().hex
-        self.store.execute(
-            "INSERT INTO jobs(id,state,verify) VALUES(?,'queued',?)", (job_id, int(verify))
-        )
+        with self.lock:
+            self.store.execute(
+                "INSERT INTO jobs(id,state,verify) VALUES(?,'queued',?)", (job_id, int(verify))
+            )
         return job_id
 
     def _cancelled(self, job_id: str) -> bool:
@@ -304,6 +305,8 @@ class Indexer:
             }
         if path and path.suffix.lower() in IMAGE_EXTENSIONS | {".pdf"}:
             identity["image_provenance"] = 1
+        if path and path.suffix.lower() in AUDIO_EXTENSIONS | VIDEO_EXTENSIONS:
+            identity["media_provenance"] = 2
         for kind, model in (
             ("text", self.settings.text_model),
             ("vision", "openai/clip-vit-base-patch32"),

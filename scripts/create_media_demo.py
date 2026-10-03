@@ -54,6 +54,30 @@ SECTIONS = [
 ]
 
 
+def narrated_video(video_path: Path, audio_path: Path, output_path: Path) -> None:
+    """Mux authored speech into the slide fixture without re-encoding its video."""
+    packets = []
+    with (
+        av.open(str(video_path)) as video,
+        av.open(str(audio_path)) as audio,
+        av.open(str(output_path), "w") as output,
+    ):
+        video_out = output.add_stream_from_template(video.streams.video[0])
+        audio_out = output.add_stream("aac", rate=22050)
+        audio_out.layout = "mono"
+        for packet in video.demux(video=0):
+            if packet.dts is not None:
+                packet.stream = video_out
+                packets.append(packet)
+        for frame in audio.decode(audio=0):
+            packets.extend(audio_out.encode(frame))
+        packets.extend(audio_out.encode())
+        for packet in sorted(
+            packets, key=lambda packet: float(packet.dts * packet.time_base)
+        ):
+            output.mux(packet)
+
+
 def main():
     folder = Path("evaluation/media_corpus").resolve()
     folder.mkdir(parents=True, exist_ok=True)
@@ -129,6 +153,11 @@ def main():
         output.mux(packet)
     # The MP4 deliberately tests silent-video support; the WAV tests speech retrieval.
     output.close()
+    narrated_video(
+        folder / "computer_science_lecture.mp4",
+        audio_path,
+        folder / "computer_science_narrated.mp4",
+    )
     queries, judgments = [], []
     for section in gold:
         for phrase in section["queries"]:

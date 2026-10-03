@@ -47,6 +47,7 @@ describe("Workspace", () => {
     document = false,
   ) {
     let watchEnabled = false;
+    let mediaEnabled = false;
     const watch = () => ({
       enabled: watchEnabled,
       state: watchEnabled ? "waiting" : "off",
@@ -67,6 +68,7 @@ describe("Workspace", () => {
               semantic_ready: true,
               status: "ready",
               text_model: "local-model",
+              media_enabled: mediaEnabled,
               watch: watch(),
             }),
           );
@@ -82,6 +84,14 @@ describe("Workspace", () => {
             }),
           );
         if (url.endsWith("/jobs")) return new Response("[]");
+        if (url.endsWith("/index/media")) {
+          expect(options?.method).toBe("PUT");
+          expect(new Headers(options?.headers).get("x-fileora-token")).toBe(
+            "local-test-token",
+          );
+          mediaEnabled = JSON.parse(String(options?.body)).enabled;
+          return new Response(JSON.stringify({ enabled: mediaEnabled }));
+        }
         if (url.endsWith("/files/1"))
           return new Response(
             JSON.stringify({
@@ -303,6 +313,22 @@ describe("Workspace", () => {
     fireEvent.click(toggle);
     await waitFor(() => expect(toggle).not.toBeChecked());
     expect(screen.getByText(/Automatic updates are off/)).toBeInTheDocument();
+  });
+
+  it("saves transcription from Library and restores its status on refresh", async () => {
+    mockService();
+    render(<App />);
+    fireEvent.click(screen.getByRole("button", { name: /My library/ }));
+    const toggle = screen.getByRole("switch", {
+      name: "Transcribe audio and video",
+    });
+    await waitFor(() => expect(toggle).toBeEnabled());
+    expect(toggle).not.toBeChecked();
+    fireEvent.click(toggle);
+    await waitFor(() => expect(toggle).toBeChecked());
+    await waitFor(() => expect(toggle).toBeEnabled());
+    fireEvent.click(toggle);
+    await waitFor(() => expect(toggle).not.toBeChecked());
   });
 
   it("restores the watch switch when saving the preference fails", async () => {

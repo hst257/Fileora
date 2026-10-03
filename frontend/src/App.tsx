@@ -24,8 +24,10 @@ import {
 } from "@phosphor-icons/react";
 import { api } from "./api";
 import { ImageEvidence } from "./ImageEvidence";
+import { MediaEvidence } from "./MediaEvidence";
 import type {
   AnswerResponse,
+  Evidence,
   FileDetail,
   Health,
   Job,
@@ -77,6 +79,12 @@ export function locationLabel(locator: Locator): string {
 }
 
 export function extractionNote(warning: string): string {
+  if (warning.startsWith("transcription_unavailable:"))
+    return "Video frames are searchable, but the audio could not be transcribed. Check local speech setup and rescan.";
+  if (warning === "no_audio_stream")
+    return "This video has no audio track. Its sampled frames are searchable.";
+  if (warning === "frame_limit_reached")
+    return "Video sampling reached its frame limit. Later visuals may be missing.";
   const partial = warning.match(/^presentation_ocr_partial:(\d+)_/);
   if (partial)
     return `Slide text is searchable. Image OCR stopped early; ${partial[1]} image placements were not processed.`;
@@ -124,6 +132,7 @@ export function App() {
   const [answer, setAnswer] = useState<AnswerResponse>();
   const [busy, setBusy] = useState(false);
   const [selected, setSelected] = useState<Result>();
+  const [activeEvidence, setActiveEvidence] = useState<Evidence>();
   const [detail, setDetail] = useState<FileDetail>();
   const [previewError, setPreviewError] = useState("");
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -137,11 +146,11 @@ export function App() {
   const [rootPath, setRootPath] = useState("");
   const [libraryBusy, setLibraryBusy] = useState(false);
   const [pendingWatch, setPendingWatch] = useState<boolean>();
+  const [pendingMedia, setPendingMedia] = useState<boolean>();
   const watchBusy = pendingWatch !== undefined;
   const [jobDetail, setJobDetail] = useState<Job>();
   const input = useRef<HTMLInputElement>(null);
   const controller = useRef<AbortController | undefined>(undefined);
-  const media = useRef<HTMLMediaElement>(null);
   const connected = Boolean(health);
   const indexing = jobs.some((job) =>
     ["queued", "running"].includes(job.state),
@@ -189,6 +198,7 @@ export function App() {
 
   useEffect(() => {
     setDetail(undefined);
+    setActiveEvidence(undefined);
     setPreviewError("");
     if (!selected) return;
     let active = true;
@@ -304,6 +314,22 @@ export function App() {
     }
   }
 
+  async function setMedia(enabled: boolean) {
+    setPendingMedia(enabled);
+    setError("");
+    try {
+      await api("/index/media", {
+        method: "PUT",
+        body: JSON.stringify({ enabled }),
+      });
+      await refresh();
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setPendingMedia(undefined);
+    }
+  }
+
   async function forget(id: number) {
     if (
       !window.confirm(
@@ -330,19 +356,23 @@ export function App() {
     }
   }
 
-  const loc = selected?.evidence[0]?.locator;
+  const currentEvidence = activeEvidence || selected?.evidence[0];
+  const loc = currentEvidence?.locator;
   const fallbackImage = detail?.chunks.find(
     (chunk) =>
       chunk.asset &&
       (selected?.modality === "image" ||
-        selected?.modality === "video" ||
-        selected?.modality === "audio" ||
+        (selected?.modality === "video" &&
+          loc?.start_ms !== undefined &&
+          chunk.locator.start_ms !== undefined &&
+          chunk.locator.start_ms <= loc.start_ms &&
+          (chunk.locator.end_ms ?? chunk.locator.start_ms) > loc.start_ms) ||
         (selected?.modality === "document" &&
           loc?.page &&
           chunk.locator.page === loc.page)),
   );
   const asset =
-    selected?.evidence.find((e) => e.asset_url)?.asset_url ||
+    currentEvidence?.asset_url ||
     (fallbackImage ? `/api/v1/assets/${fallbackImage.id}` : undefined);
   const picturedEvidence = selected?.evidence.find(
     (item) => item.asset_url === asset,
@@ -361,7 +391,7 @@ export function App() {
           chunk.locator.boxes,
       )?.locator;
   const previewUrl = selected
-    ? `/api/v1/files/${selected.file_id}/preview${loc?.page ? "#page=" + loc.page : ""}`
+    ? `/api/v1/files/${selected.file_id}/preview${loc?.page ? "#page=" + loc.page : loc?.start_ms !== undefined ? "#t=" + loc.start_ms / 1000 : ""}`
     : "";
 
   return (
@@ -804,30 +834,15 @@ export function App() {
                             />
                           )}{" "}
                           {detail &&
-                            ["audio", "video"].includes(detail.modality) &&
-                            (detail.modality === "video" ? (
-                              <video
-                                controls
-                                ref={media as React.RefObject<HTMLVideoElement>}
-                                src={previewUrl}
-                                onLoadedMetadata={() => {
-                                  if (media.current)
-                                    media.current.currentTime =
-                                      (loc?.start_ms || 0) / 1000;
-                                }}
+                            (detail.modality === "audio" ||
+                              detail.modality === "video") && (
+                              <MediaEvidence
+                                key={selected.file_id}
+                                src={`/api/v1/files/${selected.file_id}/preview`}
+                                modality={detail.modality}
+                                startMs={loc?.start_ms ?? 0}
                               />
-                            ) : (
-                              <audio
-                                controls
-                                ref={media as React.RefObject<HTMLAudioElement>}
-                                src={previewUrl}
-                                onLoadedMetadata={() => {
-                                  if (media.current)
-                                    media.current.currentTime =
-                                      (loc?.start_ms || 0) / 1000;
-                                }}
-                              />
-                            ))}
+                            )}
                           <div className="preview-excerpts">
                             {selected.warnings.map((warning) => (
                               <p className="small muted" key={warning}>
@@ -835,11 +850,30 @@ export function App() {
                               </p>
                             ))}
                             {selected.evidence
-                              .filter((item) => item.snippet)
+                              .filter(
+                                (item) =>
+                                  item.snippet ||
+                                  item.locator.start_ms !== undefined,
+                              )
                               .map((item) => (
                                 <div key={item.chunk_id}>
                                   <div className="excerpt-location">
-                                    {locationLabel(item.locator)}
+                                    {item.locator.start_ms !== undefined ? (
+                                      <button
+                                        type="button"
+                                        className="text-button"
+                                        aria-label={`Jump to ${locationLabel(item.locator)}`}
+                                        aria-pressed={
+                                          currentEvidence?.chunk_id ===
+                                          item.chunk_id
+                                        }
+                                        onClick={() => setActiveEvidence(item)}
+                                      >
+                                        {locationLabel(item.locator)}
+                                      </button>
+                                    ) : (
+                                      locationLabel(item.locator)
+                                    )}
                                     {item.symbol ? " · " + item.symbol : ""}
                                   </div>
                                   <pre>
@@ -1001,6 +1035,75 @@ export function App() {
                   <p className="small">
                     Stop Fileora and run setup to prepare the missing local
                     tools, then restart and rescan.
+                  </p>
+                )}
+            </section>
+            <section
+              className="image-search-status"
+              aria-label="Media search capabilities"
+            >
+              <h2>Search inside recordings</h2>
+              <label className="watch-control">
+                <input
+                  type="checkbox"
+                  role="switch"
+                  aria-label="Transcribe audio and video"
+                  checked={pendingMedia ?? health?.media_enabled ?? false}
+                  disabled={!health || indexing || pendingMedia !== undefined}
+                  onChange={(event) => void setMedia(event.target.checked)}
+                />
+                Transcribe audio and video
+              </label>
+              <p className="small muted">
+                This choice is saved for future launches. After enabling it,
+                rescan your recording folders. Wait for scans to finish before
+                changing it.
+              </p>
+              <p className="small muted">
+                Find spoken phrases in lectures and words or images in sampled
+                video frames. Transcription runs locally and can take time on
+                CPU.
+              </p>
+              <div className="image-capabilities">
+                <div>
+                  <strong>Spoken words</strong>
+                  <span>
+                    {!health
+                      ? "Checking…"
+                      : !health.media_enabled
+                        ? "Off"
+                        : health.transcription_ready
+                          ? "Available locally"
+                          : "Speech setup needed"}
+                  </span>
+                </div>
+                <div>
+                  <strong>Video frames</strong>
+                  <span>
+                    {!health
+                      ? "Checking…"
+                      : !health.media_enabled
+                        ? "Off"
+                        : health.media_ready
+                          ? "Available locally"
+                          : "Media setup needed"}
+                  </span>
+                </div>
+              </div>
+              <p className="small muted">
+                Use Audio or Video to narrow your search. Open a result and
+                choose a timestamp to jump to its evidence; playback starts when
+                you press Play.
+              </p>
+              {health &&
+                (!health.media_enabled ||
+                  !health.transcription_ready ||
+                  !health.media_ready) && (
+                  <p className="small">
+                    Turn on transcription above. If local speech tools are
+                    missing, stop Fileora and run{" "}
+                    <code>scripts/setup.ps1 -Media</code>, then restart and
+                    rescan your recording folders.
                   </p>
                 )}
             </section>
