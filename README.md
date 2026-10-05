@@ -6,7 +6,9 @@ Fileora runs on your computer with a React workspace and a FastAPI service. SQLi
 
 V4 (package version **0.4.0**) is the final feature release: local text, code, PDF, PowerPoint, image, audio, and video search. V5 answer generation is skipped; there is no Ollama setup or generated-answer mode. Remaining work focuses on performance, reliability, and polish.
 
-![Fileora workspace](docs/screenshots/workspace.png)
+![Fileora V4 search workspace with dark appearance, amber accents, sidebar navigation, file-type filters, and example queries](docs/screenshots/workspace-v4.png)
+
+Current desktop UI, captured with the authored demo library. Fileora opens directly into the search workspace.
 
 ## Run on Windows
 
@@ -21,7 +23,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/start.ps1
 
 Open **http://127.0.0.1:8765**. Search directly in the workspace, choose a file type, or press Ctrl+K to focus the search field. Select **My library**, paste an absolute folder path, and rescan. Only selected folders are read. Select a match to inspect the evidence and open its source.
 
-The workspace follows [DESIGN.md](DESIGN.md) with a near-black canvas, amber accents, Inter headings, and monospace body text. New sessions default to dark appearance. Choose **Appearance** to use the system theme, light mode, or dark mode; the browser remembers your choice. My library puts folder and rescan controls first. Source previews use a reading pane on desktop and a keyboard-accessible dialog on smaller screens. See [frontend design and maintenance](docs/frontend.md).
+The workspace follows [DESIGN.md](DESIGN.md) with a near-black canvas, amber accents, Inter headings, monospace body text, and Phosphor icons. The sidebar provides Search, My library, and indexed-folder navigation; file-type tabs, Filters, and example queries sit beside the search field. New sessions default to dark appearance. Choose **Appearance** to use the system theme, light mode, or dark mode; the browser remembers your choice. My library puts folder and rescan controls first. Source previews use a reading pane on desktop and a keyboard-accessible dialog on smaller screens. See [frontend design and maintenance](docs/frontend.md).
 
 For V2 automatic updates, enable **Watch folders** in **My library**. Fileora saves the choice in this catalog and restores it on the next normal launch. While the app is running, it notices edits, new files, renames, and deletions; a full verification catches missed events every 15 minutes. The Library shows whether native watching is active or periodic scans are being used. Automatic updates start off for a new catalog. Disabling them lets an already queued/running scan finish. See the [V2 milestone and checks](docs/v2.md).
 
