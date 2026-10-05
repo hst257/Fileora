@@ -19,7 +19,9 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/setup.ps1 -Demo
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/start.ps1
 ```
 
-Open **http://127.0.0.1:8765**. Select **My library**, paste an absolute folder path, and rescan. Only selected folders are read. Press Ctrl+K to search. Select a match to inspect the evidence and open its source.
+Open **http://127.0.0.1:8765**. Search directly in the workspace, choose a file type, or press Ctrl+K to focus the search field. Select **My library**, paste an absolute folder path, and rescan. Only selected folders are read. Select a match to inspect the evidence and open its source.
+
+The workspace follows [DESIGN.md](DESIGN.md) with a near-black canvas, amber accents, Inter headings, and monospace body text. New sessions default to dark appearance. Choose **Appearance** to use the system theme, light mode, or dark mode; the browser remembers your choice. My library puts folder and rescan controls first. Source previews use a reading pane on desktop and a keyboard-accessible dialog on smaller screens. See [frontend design and maintenance](docs/frontend.md).
 
 For V2 automatic updates, enable **Watch folders** in **My library**. Fileora saves the choice in this catalog and restores it on the next normal launch. While the app is running, it notices edits, new files, renames, and deletions; a full verification catches missed events every 15 minutes. The Library shows whether native watching is active or periodic scans are being used. Automatic updates start off for a new catalog. Disabling them lets an already queued/running scan finish. See the [V2 milestone and checks](docs/v2.md).
 

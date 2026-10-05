@@ -25,8 +25,9 @@ test("image OCR evidence highlights actual words and leaves unrelated keyword ta
   await expect(overlay).toBeVisible();
   await expect(overlay.locator("rect").first()).toBeAttached();
   await page.screenshot({
+    animations: "disabled",
     path: "../docs/screenshots/images.png",
-    fullPage: true,
+    fullPage: false,
   });
   await page.getByRole("button", { name: "Hide highlights" }).click();
   await expect(overlay).toHaveCount(0);
@@ -61,8 +62,9 @@ test("image OCR highlights fit a mobile preview", async ({ page }) => {
   expect(Math.abs(imageBox!.width - overlayBox!.width)).toBeLessThan(1);
   expect(Math.abs(imageBox!.height - overlayBox!.height)).toBeLessThan(1);
   await page.screenshot({
+    animations: "disabled",
     path: "../docs/screenshots/images-mobile.png",
-    fullPage: true,
+    fullPage: false,
   });
   expect(
     await page.evaluate(

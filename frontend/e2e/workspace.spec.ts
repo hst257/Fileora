@@ -6,8 +6,9 @@ test("search, source preview, filters and library status", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByText("Local service connected")).toBeVisible();
   await page.screenshot({
+    animations: "disabled",
     path: "../docs/screenshots/workspace.png",
-    fullPage: true,
+    fullPage: false,
   });
   await page.getByLabel("Search your files").fill("semaphore critical section");
   await page.getByLabel("Run search").click();
@@ -20,8 +21,9 @@ test("search, source preview, filters and library status", async ({ page }) => {
   await expect(page.getByLabel("File preview")).toBeVisible();
   await expect(page.getByRole("link", { name: "Open original" })).toBeVisible();
   await page.screenshot({
+    animations: "disabled",
     path: "../docs/screenshots/search.png",
-    fullPage: true,
+    fullPage: false,
   });
   await page.getByRole("button", { name: "Close preview" }).click();
   await page.getByRole("button", { name: "Filters", exact: true }).click();
@@ -33,6 +35,7 @@ test("search, source preview, filters and library status", async ({ page }) => {
   await expect(page.getByText("A home for what you know.")).toBeVisible();
   await expect(page.getByLabel("Folder path")).toBeVisible();
   await page.screenshot({
+    animations: "disabled",
     path: "../docs/screenshots/library.png",
     fullPage: true,
   });
@@ -51,8 +54,9 @@ test("mobile fits without horizontal overflow", async ({ page }) => {
     ),
   ).toBe(true);
   await page.screenshot({
+    animations: "disabled",
     path: "../docs/screenshots/mobile.png",
-    fullPage: true,
+    fullPage: false,
   });
   await page.getByRole("button", { name: /My library/ }).click();
   await expect(
@@ -64,6 +68,7 @@ test("mobile fits without horizontal overflow", async ({ page }) => {
     ),
   ).toBe(true);
   await page.screenshot({
+    animations: "disabled",
     path: "../docs/screenshots/library-mobile.png",
     fullPage: true,
   });

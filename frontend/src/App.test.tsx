@@ -27,7 +27,7 @@ describe("Source locations", () => {
   });
   it("formats pages, lines and timestamps", () => {
     expect(locationLabel({ page: 14 })).toBe("Page 14");
-    expect(locationLabel({ line_start: 82, line_end: 89 })).toBe("Lines 82–89");
+    expect(locationLabel({ line_start: 82, line_end: 89 })).toBe("Lines 82-89");
     expect(locationLabel({ start_ms: 125000 })).toBe("2:05");
     expect(locationLabel({ slide: 2 })).toBe("Slide 2");
     expect(locationLabel({ slide: 2, section: "notes" })).toBe(

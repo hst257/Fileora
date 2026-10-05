@@ -68,8 +68,9 @@ test("video matches use the sampled frame, highlighted words, and timestamp play
     page.getByRole("link", { name: "Open original" }),
   ).toHaveAttribute("href", /#t=\d/);
   await page.screenshot({
+    animations: "disabled",
     path: "../docs/screenshots/media.png",
-    fullPage: true,
+    fullPage: false,
   });
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(player).toBeVisible();
